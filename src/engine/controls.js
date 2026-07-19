@@ -60,6 +60,20 @@ export class CameraRig {
     this._easeBackOffsets = true;
   }
 
+  // Street-view: glide down to eye level at `pos`, facing `look` (optional).
+  dropTo(pos, look, instant = false) {
+    this.freeMode = true;
+    this.freePos.set(pos[0], pos[1], pos[2]);
+    if (instant) this.camera.position.copy(this.freePos);
+    if (look) {
+      const dx = look[0] - pos[0], dy = look[1] - pos[1], dz = look[2] - pos[2];
+      this.baseYaw = Math.atan2(dx, dz);
+      this.basePitch = Math.atan2(dy, Math.hypot(dx, dz));
+      this.yaw = 0;
+      this.pitch = 0;
+    }
+  }
+
   update(dt, stops, seg) {
     const t = this.timeline;
     // --- rail vantage: interpolate camera pos/look between era stops ---
@@ -103,7 +117,9 @@ export class CameraRig {
       // stay above terrain
       const minY = this.heightAt(this.freePos.x, this.freePos.z) + 2.2;
       if (this.freePos.y < minY) this.freePos.y = minY;
-      this.camera.position.lerp(this.freePos, Math.min(1, dt * 10));
+      // long jumps (street-view drops) glide; close control stays tight
+      const glide = this.camera.position.distanceTo(this.freePos) > 25 ? 2.2 : 10;
+      this.camera.position.lerp(this.freePos, Math.min(1, dt * glide));
       // in free mode the user's yaw/pitch is absolute
       const dir = new THREE.Vector3(
         Math.sin(this.baseYaw + this.yaw) * Math.cos(this.basePitch + this.pitch),

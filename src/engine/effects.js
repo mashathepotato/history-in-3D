@@ -185,6 +185,127 @@ export class Boats {
   }
 }
 
+// ---------- traffic: era-gated vehicles following the road network ----------
+export class Traffic {
+  constructor(defs, heightAt) {
+    // defs: [{from,to,path,type:'cart'|'tram'|'car'|'bus',count,speed,offset,colors}]
+    this.group = new THREE.Group();
+    this.items = [];
+    for (const d of defs) {
+      const pts = d.path.map(([x, z]) => {
+        // lateral lane offset applied along the path normal is approximated
+        // by a simple perpendicular shift of each control point
+        return new THREE.Vector3(x, 0, z);
+      });
+      if (d.offset) {
+        for (let i = 0; i < pts.length; i++) {
+          const a = pts[Math.max(0, i - 1)], b = pts[Math.min(pts.length - 1, i + 1)];
+          const dx = b.x - a.x, dz = b.z - a.z;
+          const l = Math.hypot(dx, dz) || 1;
+          pts[i].x += (-dz / l) * d.offset;
+          pts[i].z += (dx / l) * d.offset;
+        }
+      }
+      const curve = new THREE.CatmullRomCurve3(pts);
+      const r = rng(d.seed || 17);
+      for (let i = 0; i < (d.count || 1); i++) {
+        const v = this._vehicle(d.type, r);
+        this.group.add(v);
+        this.items.push({ d, curve, v, u0: (i + r() * 0.5) / (d.count || 1) });
+      }
+    }
+    this.heightAt = heightAt;
+  }
+
+  _vehicle(type, r) {
+    const g = new THREE.Group();
+    if (type === 'cart') {
+      const wood = mat(0x6b4f2e);
+      const bed = new THREE.Mesh(new THREE.BoxGeometry(1.4, 0.5, 2.6), wood);
+      bed.position.y = 0.9; bed.castShadow = true;
+      g.add(bed);
+      const wheelGeo = new THREE.CylinderGeometry(0.5, 0.5, 0.12, 10);
+      for (const [wx, wz] of [[-0.8, 0.7], [0.8, 0.7], [-0.8, -0.7], [0.8, -0.7]]) {
+        const wh = new THREE.Mesh(wheelGeo, wood);
+        wh.rotation.z = Math.PI / 2;
+        wh.position.set(wx, 0.5, wz);
+        g.add(wh);
+      }
+      // horse: body + neck + head, honest low-poly
+      const hide = mat([0x5a4030, 0x3a2e24, 0x7a6248][Math.floor(r() * 3)]);
+      const body = new THREE.Mesh(new THREE.BoxGeometry(0.9, 0.9, 1.8), hide);
+      body.position.set(0, 1.25, 2.9); body.castShadow = true;
+      g.add(body);
+      const neck = new THREE.Mesh(new THREE.BoxGeometry(0.4, 0.9, 0.5), hide);
+      neck.position.set(0, 1.9, 3.6); neck.rotation.x = 0.4;
+      g.add(neck);
+      const head = new THREE.Mesh(new THREE.BoxGeometry(0.35, 0.35, 0.8), hide);
+      head.position.set(0, 2.25, 3.95);
+      g.add(head);
+      for (const [lx, lz] of [[-0.3, 2.2], [0.3, 2.2], [-0.3, 3.5], [0.3, 3.5]]) {
+        const leg = new THREE.Mesh(new THREE.BoxGeometry(0.16, 0.9, 0.16), hide);
+        leg.position.set(lx, 0.45, lz);
+        g.add(leg);
+      }
+    } else if (type === 'tram') {
+      const body = new THREE.Mesh(new THREE.BoxGeometry(2.3, 2.6, 8.5), mat(0xc8901f, { flat: false }));
+      body.position.y = 1.9; body.castShadow = true;
+      g.add(body);
+      const roof = new THREE.Mesh(new THREE.BoxGeometry(2.4, 0.3, 8.7), mat(0x7a2f22));
+      roof.position.y = 3.35;
+      g.add(roof);
+      const winMat = mat(0x2c3a48, { flat: false, rough: 0.3 });
+      for (const side of [1.17, -1.17]) {
+        const win = new THREE.Mesh(new THREE.BoxGeometry(0.05, 1, 7.6), winMat);
+        win.position.set(side, 2.4, 0);
+        g.add(win);
+      }
+      const panto = new THREE.Mesh(new THREE.BoxGeometry(0.08, 1.4, 0.08), mat(0x333333));
+      panto.position.y = 4.2; panto.rotation.z = 0.3;
+      g.add(panto);
+    } else if (type === 'bus') {
+      const body = new THREE.Mesh(new THREE.BoxGeometry(2.4, 2.6, 9), mat(0x3f6d5a, { flat: false }));
+      body.position.y = 1.8; body.castShadow = true;
+      g.add(body);
+      const win = new THREE.Mesh(new THREE.BoxGeometry(2.5, 0.9, 7.6), mat(0x2c3a48, { flat: false, rough: 0.3 }));
+      win.position.y = 2.5;
+      g.add(win);
+    } else { // car
+      const colors = [0xa8352a, 0x36486a, 0xd8d4c8, 0x3a3d40, 0x7c8288, 0x8a7332];
+      const paint = mat(colors[Math.floor(r() * colors.length)], { flat: false, rough: 0.4, metal: 0.3 });
+      const body = new THREE.Mesh(new THREE.BoxGeometry(1.9, 0.6, 4.2), paint);
+      body.position.y = 0.75; body.castShadow = true;
+      g.add(body);
+      const cabin = new THREE.Mesh(new THREE.BoxGeometry(1.7, 0.6, 2.1), mat(0x2c3a48, { flat: false, rough: 0.3 }));
+      cabin.position.set(0, 1.3, -0.2);
+      g.add(cabin);
+      const wheelGeo = new THREE.CylinderGeometry(0.36, 0.36, 0.25, 8);
+      const rubber = mat(0x1e2022);
+      for (const [wx, wz] of [[-0.95, 1.3], [0.95, 1.3], [-0.95, -1.3], [0.95, -1.3]]) {
+        const wh = new THREE.Mesh(wheelGeo, rubber);
+        wh.rotation.z = Math.PI / 2;
+        wh.position.set(wx, 0.36, wz);
+        g.add(wh);
+      }
+    }
+    return g;
+  }
+
+  update(t, year) {
+    for (const it of this.items) {
+      const active = year >= it.d.from && year <= (it.d.to ?? 9999);
+      it.v.visible = active;
+      if (!active) continue;
+      const speed = it.d.speed || 0.01;
+      const u = ((t * speed) + it.u0) % 1;
+      const p = it.curve.getPointAt(u);
+      const tan = it.curve.getTangentAt(u);
+      it.v.position.set(p.x, this.heightAt(p.x, p.z) + 0.55, p.z);
+      it.v.rotation.y = Math.atan2(tan.x, tan.z) + Math.PI;
+    }
+  }
+}
+
 // ---------- crowds: instanced little people ----------
 export class Crowds {
   constructor(defs, heightAt) {
@@ -229,7 +350,7 @@ export class Crowds {
 
 // ---------- trees: instanced, per-era groves ----------
 export class Groves {
-  constructor(defs, heightAt) {
+  constructor(defs, heightAt, isBlocked = null) {
     // defs: [{from,to,area:[x,z,rx,rz], count, kind:'oak'|'poplar'|'pine'|'chestnut', seed}]
     this.group = new THREE.Group();
     this.items = [];
@@ -259,7 +380,7 @@ export class Groves {
         const x = d.area[0] + Math.cos(ang) * rr * d.area[2];
         const z = d.area[1] + Math.sin(ang) * rr * d.area[3];
         const y = heightAt(x, z);
-        if (y < 2.6) { // don't plant in the river
+        if (y < 2.6 || (isBlocked && isBlocked(x, z))) { // no trees in the river or on roads
           m4.makeScale(0.001, 0.001, 0.001);
           trunk.setMatrixAt(i, m4); crown.setMatrixAt(i, m4);
           continue;

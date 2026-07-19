@@ -54,6 +54,13 @@ function facadeTexture(style, base, accent) {
     for (let x = 0; x < 256; x += 32) { g.fillRect(x, 0, 2, 256); }
   } else if (style === 'logs') {
     for (let y = 0; y < 256; y += 22) { g.fillRect(0, y, 256, 3); }
+  } else if (style === 'shopfront') {
+    // ground-floor retail: big glass panes, doors, signboard band
+    g.fillRect(0, 0, 256, 22);                                  // signboard
+    for (let x = 8; x < 240; x += 62) {
+      g.fillRect(x, 34, 40, 190);                               // glass pane
+      g.fillRect(x + 46, 90, 12, 134);                          // door
+    }
   }
   const t = new THREE.CanvasTexture(c);
   t.wrapS = t.wrapT = THREE.RepeatWrapping;
@@ -68,7 +75,9 @@ export function facadeMat(style, base, accent, repeat = [1, 1]) {
     const t = facadeTexture(style, base, accent).clone();
     t.needsUpdate = true;
     t.repeat.set(repeat[0], repeat[1]);
-    matCache.set(key, new THREE.MeshStandardMaterial({ map: t, roughness: 0.9 }));
+    // faint self-glow keeps shadowed facades readable at street level
+    const glow = new THREE.Color(base).multiplyScalar(0.09);
+    matCache.set(key, new THREE.MeshStandardMaterial({ map: t, roughness: 0.9, emissive: glow }));
   }
   return matCache.get(key);
 }
@@ -80,6 +89,52 @@ export function rng(seed) {
     s = (s * 1664525 + 1013904223) >>> 0;
     return s / 4294967296;
   };
+}
+
+// Resample a [x,z] polyline every `step` metres.
+export function samplePath(pts, step = 10) {
+  const samples = [];
+  for (let i = 0; i < pts.length - 1; i++) {
+    const [x1, z1] = pts[i], [x2, z2] = pts[i + 1];
+    const len = Math.hypot(x2 - x1, z2 - z1);
+    const n = Math.max(1, Math.ceil(len / step));
+    for (let j = 0; j < n; j++) samples.push([x1 + (x2 - x1) * j / n, z1 + (z2 - z1) * j / n]);
+  }
+  if (pts.length) samples.push(pts[pts.length - 1]);
+  return samples;
+}
+
+// Terrain-draped strip along sampled points, offset sideways by `lateral`.
+// Subdivided ACROSS its width so wide roads follow the terrain's cross-
+// section (a 2-vertex-wide ribbon would bridge flat over valleys).
+function ribbonGeo(samples, w, hAt, yOff, lateral = 0) {
+  const cols = Math.max(2, Math.ceil(w / 6) + 1);
+  const pos = [], idx = [];
+  for (let i = 0; i < samples.length; i++) {
+    const [x, z] = samples[i];
+    const [xp, zp] = samples[Math.max(0, i - 1)];
+    const [xn, zn] = samples[Math.min(samples.length - 1, i + 1)];
+    let dx = xn - xp, dz = zn - zp;
+    const l = Math.hypot(dx, dz) || 1;
+    dx /= l; dz /= l;
+    const nx = -dz, nz = dx;
+    for (let c = 0; c < cols; c++) {
+      const off = lateral + w * (c / (cols - 1) - 0.5);
+      const px = x + nx * off, pz = z + nz * off;
+      pos.push(px, hAt(px, pz) + yOff, pz);
+    }
+  }
+  for (let i = 0; i < samples.length - 1; i++) {
+    for (let c = 0; c < cols - 1; c++) {
+      const a = i * cols + c;
+      idx.push(a, a + 1, a + cols, a + 1, a + cols + 1, a + cols);
+    }
+  }
+  const geo = new THREE.BufferGeometry();
+  geo.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3));
+  geo.setIndex(idx);
+  geo.computeVertexNormals();
+  return geo;
 }
 
 function box(w, h, d, material, x = 0, y = 0, z = 0) {
@@ -187,13 +242,19 @@ export const generators = {
     return g;
   },
 
-  // Brick/stone townhouse, 19th-century street fabric.
+  // Brick/stone townhouse, 19th-century street fabric. Ground-floor shops.
   townhouse(p = {}) {
     const g = new THREE.Group();
     const w = p.w || 12, d = p.d || 10, floors = p.floors || 3;
     const h = floors * 3.4;
-    const f = facadeMat('windows', p.wall || '#c9b190', '#3a3a45', [Math.max(1, Math.round(w / 8)), floors * 0.55]);
-    g.add(box(w, h, d, f));
+    const f = facadeMat('windows', p.wall || '#c9b190', '#3a3a45', [Math.max(1, Math.round(w / 8)), Math.max(1, floors * 0.55 - 0.5)]);
+    if (p.shops !== false && floors >= 2) {
+      const shopMat = facadeMat('shopfront', p.shopColor || '#6b6258', '#2a2f38', [Math.max(1, Math.round(w / 9)), 1]);
+      g.add(box(w * 1.01, 3.6, d * 1.01, shopMat));
+      g.add(box(w, h - 3.6, d, f, 0, 3.6));
+    } else {
+      g.add(box(w, h, d, f));
+    }
     g.add(box(w * 1.04, 0.5, d * 1.04, mat(0x8a7a60), 0, h));
     const roof = box(w, 1.6, d, mat(p.roofColor || 0x5f6b52), 0, h + 0.5);
     roof.scale.set(0.94, 1, 0.94);
@@ -206,8 +267,10 @@ export const generators = {
     const g = new THREE.Group();
     const w = p.w || 30, d = p.d || 16, floors = p.floors || 7;
     const h = floors * 3.6;
-    const f = facadeMat('windows', p.wall || '#d8c8a8', '#33343f', [Math.round(w / 7), floors * 0.6]);
-    g.add(box(w, h, d, f));
+    const f = facadeMat('windows', p.wall || '#d8c8a8', '#33343f', [Math.round(w / 7), Math.max(1, floors * 0.6 - 0.6)]);
+    const shopMat = facadeMat('shopfront', p.shopColor || '#7d7264', '#2a2f38', [Math.max(1, Math.round(w / 9)), 1]);
+    g.add(box(w * 1.01, 4.2, d * 1.01, shopMat));                // arcaded ground floor
+    g.add(box(w, h - 4.2, d, f, 0, 4.2));
     g.add(box(w * 1.05, 1, d * 1.05, mat(0xcbbc9c), 0, h));      // cornice
     g.add(box(w * 0.5, 3.6, d * 0.7, facadeMat('arches', '#d8c8a8', '#8a7f68', [3, 1]), 0, h + 1)); // attic tier
     return g;
@@ -573,47 +636,98 @@ export const generators = {
   },
 
   // Road ribbon draped over the terrain along a [x,z] polyline.
-  // Styles are just colors: dirt, cobble, asphalt.
+  // Options: sidewalk (paved edges), line (dashed centerline for asphalt).
   road(p = {}) {
     const hAt = p.heightAt || (() => 0);
     const w = p.w || 8;
-    const pts = p.path || [];
-    const samples = [];
-    for (let i = 0; i < pts.length - 1; i++) {
-      const [x1, z1] = pts[i], [x2, z2] = pts[i + 1];
-      const len = Math.hypot(x2 - x1, z2 - z1);
-      const n = Math.max(1, Math.ceil(len / 10));
-      for (let j = 0; j < n; j++) samples.push([x1 + (x2 - x1) * j / n, z1 + (z2 - z1) * j / n]);
+    const samples = samplePath(p.path || [], 10);
+    const g = new THREE.Group();
+    const roadMat = new THREE.MeshStandardMaterial({
+      color: p.color || 0x55585c, roughness: 1, side: THREE.DoubleSide,
+      polygonOffset: true, polygonOffsetFactor: -2, polygonOffsetUnits: -2,
+    });
+    const main = new THREE.Mesh(ribbonGeo(samples, w, hAt, 0.5, 0), roadMat);
+    main.receiveShadow = true;
+    g.add(main);
+    if (p.sidewalk) {
+      const sw = Math.min(3.5, w * 0.28);
+      const swMat = new THREE.MeshStandardMaterial({
+        color: p.sidewalkColor || 0x9b9c96, roughness: 1, side: THREE.DoubleSide,
+        polygonOffset: true, polygonOffsetFactor: -3, polygonOffsetUnits: -3,
+      });
+      for (const side of [1, -1]) {
+        const m = new THREE.Mesh(ribbonGeo(samples, sw, hAt, 0.68, side * (w / 2 + sw / 2)), swMat);
+        m.receiveShadow = true;
+        g.add(m);
+      }
     }
-    samples.push(pts[pts.length - 1]);
-    const pos = [], idx = [];
+    if (p.line) {
+      // dashed centerline
+      const dashGeo = new THREE.BoxGeometry(0.35, 0.1, 3);
+      const dashMat = mat(0xd8d8d0, { flat: false });
+      const dashes = [];
+      for (let i = 0; i < samples.length - 1; i += 2) dashes.push(i);
+      const inst = new THREE.InstancedMesh(dashGeo, dashMat, dashes.length);
+      const m4 = new THREE.Matrix4();
+      const e = new THREE.Euler();
+      const q = new THREE.Quaternion();
+      const v = new THREE.Vector3(), sc = new THREE.Vector3(1, 1, 1);
+      dashes.forEach((i, k) => {
+        const [x, z] = samples[i];
+        const [xn, zn] = samples[Math.min(samples.length - 1, i + 1)];
+        e.set(0, Math.atan2(xn - x, zn - z), 0);
+        q.setFromEuler(e);
+        m4.compose(v.set(x, hAt(x, z) + 0.62, z), q, sc);
+        inst.setMatrixAt(k, m4);
+      });
+      g.add(inst);
+    }
+    return g;
+  },
+
+  // A line of streetlights along a path, offset to the side of the road.
+  // style: 'gas' (1870s cast-iron, warm globes) or 'modern' (tall grey, arm).
+  lampline(p = {}) {
+    const hAt = p.heightAt || (() => 0);
+    const g = new THREE.Group();
+    const gas = p.style === 'gas';
+    const h = gas ? 4.6 : 9;
+    const postGeo = new THREE.CylinderGeometry(gas ? 0.09 : 0.14, gas ? 0.13 : 0.2, h, 6);
+    const postMat = mat(gas ? 0x2e3a30 : 0x565b60, { flat: false, metal: 0.4, rough: 0.5 });
+    const lampGeo = gas ? new THREE.SphereGeometry(0.32, 8, 6) : new THREE.BoxGeometry(1.1, 0.25, 0.4);
+    const lampMat = new THREE.MeshStandardMaterial({
+      color: 0xffe8b0, emissive: 0xffd070, emissiveIntensity: gas ? 0.7 : 0.5, roughness: 0.4,
+    });
+    const pts = [];
+    const samples = samplePath(p.path || [], p.spacing || 32);
     for (let i = 0; i < samples.length; i++) {
       const [x, z] = samples[i];
-      const [xp, zp] = samples[Math.max(0, i - 1)];
       const [xn, zn] = samples[Math.min(samples.length - 1, i + 1)];
+      const [xp, zp] = samples[Math.max(0, i - 1)];
       let dx = xn - xp, dz = zn - zp;
       const l = Math.hypot(dx, dz) || 1;
-      dx /= l; dz /= l;
-      const nx = -dz, nz = dx;
-      const ax = x + nx * w / 2, az = z + nz * w / 2;
-      const bx = x - nx * w / 2, bz = z - nz * w / 2;
-      pos.push(ax, hAt(ax, az) + 0.5, az, bx, hAt(bx, bz) + 0.5, bz);
+      const sides = p.bothSides ? [1, -1] : [i % 2 ? 1 : -1];
+      for (const side of sides) {
+        pts.push([x + (-dz / l) * (p.offset || 6) * side, z + (dx / l) * (p.offset || 6) * side, Math.atan2(dx, dz) + (side > 0 ? Math.PI : 0)]);
+      }
     }
-    for (let i = 0; i < samples.length - 1; i++) {
-      const a = i * 2;
-      idx.push(a, a + 1, a + 2, a + 1, a + 3, a + 2);
-    }
-    const geo = new THREE.BufferGeometry();
-    geo.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3));
-    geo.setIndex(idx);
-    geo.computeVertexNormals();
-    const m = new THREE.Mesh(geo, new THREE.MeshStandardMaterial({
-      color: p.color || 0x55585c, roughness: 1,
-      polygonOffset: true, polygonOffsetFactor: -2, polygonOffsetUnits: -2,
-    }));
-    m.receiveShadow = true;
-    const g = new THREE.Group();
-    g.add(m);
+    const posts = new THREE.InstancedMesh(postGeo, postMat, pts.length);
+    const lamps = new THREE.InstancedMesh(lampGeo, lampMat, pts.length);
+    const m4 = new THREE.Matrix4();
+    const e = new THREE.Euler();
+    const q = new THREE.Quaternion();
+    const v = new THREE.Vector3(), sc = new THREE.Vector3(1, 1, 1);
+    pts.forEach(([x, z, ang], i) => {
+      const y = hAt(x, z);
+      e.set(0, ang, 0); q.setFromEuler(e);
+      m4.compose(v.set(x, y + h / 2, z), q, sc);
+      posts.setMatrixAt(i, m4);
+      // gas: globe on top; modern: arm reaching over the road
+      m4.compose(v.set(x, y + h + (gas ? 0.2 : -0.15), z), q, sc);
+      lamps.setMatrixAt(i, m4);
+    });
+    posts.castShadow = true;
+    g.add(posts, lamps);
     return g;
   },
 
@@ -691,7 +805,7 @@ export const generators = {
 export function buildStructure(entry, phase, terrainHeightAt) {
   const gen = generators[phase.build];
   if (!gen) { console.warn(`Unknown generator: ${phase.build}`); return new THREE.Group(); }
-  const pathBased = ['palisade', 'rampart', 'road', 'plaza'].includes(phase.build);
+  const pathBased = ['palisade', 'rampart', 'road', 'plaza', 'lampline'].includes(phase.build);
   const params = pathBased ? { ...(phase.params || {}), heightAt: terrainHeightAt } : (phase.params || {});
   if (phase.build === 'plaza') { params.x = entry.pos[0]; params.z = entry.pos[1]; }
   const g = gen(params);

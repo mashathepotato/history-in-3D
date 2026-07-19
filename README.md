@@ -27,6 +27,7 @@ Or deploy the repo as-is to GitHub Pages.
 | **Scroll** | Travel through time (buildings rise and fall around you) |
 | **W A S D** (+ Q/E, Shift) | Walk/fly freely through the scene |
 | **← →** | Jump between era stops |
+| **V** or ⬇ | **Street level**: drop to a curated eye-level spot in the current era, press again to fly back up |
 | **Space** | Toggle the story panel |
 | **▶** | Auto-play the whole timeline |
 
@@ -51,6 +52,13 @@ St. Sophia in 1030 and scrolling forward.
   Maidan of 2014), fires and smoke for the sack of 1240 and the war years.
 - **Environment**: sky, sun, fog and water are keyframed per era — the amber
   haze of the Mongol sack, the grey of 1943, the clear light of independence.
+- **Street life**: a connected road network (junction pads, sidewalks, dashed
+  centerlines), gas lamps that become tall streetlights, ground-floor
+  storefronts, and era-gated traffic — horse carts, the 1892 electric tram
+  (the empire's first), then cars and buses following the actual streets.
+  District buildings and trees respect the road network instead of spawning
+  on it. Deep links: `?year=1964&street=1` drops you straight onto the
+  Khreshchatyk asphalt.
 - **The ground itself urbanizes**: meadows turn to dusty medieval town and
   then to pavement as each district's urbanization year passes; dirt tracks
   become cobbled streets and squares, then asphalt boulevards, bridge

@@ -58,6 +58,8 @@ export class UI {
       this.el.btnPlay.textContent = this.t.playing ? '❚❚' : '▶';
       if (this.onNavigate) this.onNavigate();
     });
+    const streetBtn = document.getElementById('btn-street');
+    streetBtn.addEventListener('click', () => { if (this.onStreetToggle) this.onStreetToggle(); });
     document.getElementById('story-close').addEventListener('click', () => {
       this._storyDismissed = true;
       this.el.story.classList.add('hidden');
@@ -76,6 +78,7 @@ export class UI {
     window.addEventListener('keydown', (e) => {
       if (e.code === 'ArrowRight') this.nav(1);
       else if (e.code === 'ArrowLeft') this.nav(-1);
+      else if (e.code === 'KeyV') { if (this.onStreetToggle) this.onStreetToggle(); }
       else if (e.code === 'Space') {
         e.preventDefault();
         const i = this.t.atStop();

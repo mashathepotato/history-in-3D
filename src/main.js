@@ -47,6 +47,17 @@ async function start() {
   const ui = new UI(timeline, cfg);
   ui.onNavigate = () => rig.reattach();      // era jumps fly you back to the vantage
   ui.onNavigateSoft = () => {};              // wheel scrub keeps your position
+  // street-view toggle: drop to a curated eye-level spot for this era
+  // (or straight down from wherever you are), press again to fly back up
+  ui.onStreetToggle = (instant = false) => {
+    if (rig.freeMode) { rig.reattach(); return; }
+    const stop = cfg.stops[timeline.nearestStopIndex(timeline.year)];
+    if (stop.street) rig.dropTo(stop.street.pos, stop.street.look, instant);
+    else {
+      const p = camera.position;
+      rig.dropTo([p.x, cfg.terrain.heightAt(p.x, p.z) + 2.4, p.z], null, instant);
+    }
+  };
 
   // deep-link: ?year=1037 starts the journey at that year
   const startYear = parseFloat(params.get('year'));
@@ -69,8 +80,11 @@ async function start() {
     ui.update();
     renderer.render(world.scene, camera);
     if (++firstFrames === 3) {
-      loaderEl.classList.add('done');   // reveal once warm
-      setTimeout(() => loaderEl.remove(), 800);
+      if (params.has('snap')) loaderEl.remove();   // instant reveal (screenshots)
+      else {
+        loaderEl.classList.add('done');            // reveal once warm
+        setTimeout(() => loaderEl.remove(), 800);
+      }
     }
     requestAnimationFrame(loop);
   }
@@ -78,6 +92,8 @@ async function start() {
 
   // open the first story after the intro settles
   setTimeout(() => { if (timeline.atStop() === 0) ui.showStory(0); }, 1800);
+  // ?street=1 deep-links straight into street level
+  if (params.has('street')) setTimeout(() => ui.onStreetToggle(params.has('snap')), 300);
 }
 
 start().catch((err) => {

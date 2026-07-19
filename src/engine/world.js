@@ -2,11 +2,13 @@
 import * as THREE from 'three';
 import { buildTerrain, buildWater, buildSky } from './terrain.js';
 import { buildStructure, generators, rng } from './buildings.js';
-import { FireSystem, Birds, Boats, Crowds, Groves } from './effects.js';
+import { FireSystem, Birds, Boats, Crowds, Groves, Traffic } from './effects.js';
 import { easeOutBack, lerp } from './timeline.js';
 
 export class World {
   constructor(cfg, timeline, onProgress) {
+    // ?skip=roads,lamps,traffic,districts — debugging aid to isolate visuals
+    this.skip = new Set((new URLSearchParams(location.search).get('skip') || '').split(','));
     this.cfg = cfg;
     this.timeline = timeline;
     this.scene = new THREE.Scene();
@@ -52,10 +54,36 @@ export class World {
     this.scene.add(water.mesh);
     progress(0.25, 'Filling the Dnipro…');
 
+    // Exclusion shapes: district fabric must not spawn on roads, squares,
+    // or inside landmark footprints.
+    this._excl = { segs: [], discs: [] };
+    const FOOTPRINT = new Set(['church', 'classical', 'stalinka', 'panelka', 'glassTower',
+      'bellTower', 'gate', 'woodCastle', 'motherland', 'column', 'stadium', 'townhouse']);
+    for (const entry of cfg.structures) {
+      for (const phase of entry.phases) {
+        if (phase.build === 'road') {
+          const hw = (phase.params?.w || 8) / 2;
+          const path = phase.params?.path || [];
+          for (let i = 0; i < path.length - 1; i++) {
+            this._excl.segs.push([path[i][0], path[i][1], path[i + 1][0], path[i + 1][1], hw]);
+          }
+        } else if (phase.build === 'plaza') {
+          this._excl.discs.push([entry.pos[0], entry.pos[1],
+            Math.max(phase.params?.rx || 40, phase.params?.rz || 40) + 2]);
+        } else if (FOOTPRINT.has(phase.build)) {
+          const p = phase.params || {};
+          this._excl.discs.push([entry.pos[0], entry.pos[1],
+            Math.max(p.w || 16, p.d || 16) * 0.8 + 5]);
+        }
+      }
+    }
+
     // --- structures (each phase becomes a group animated by presence) ---
     this.animated = [];   // {group, from, to, rise, baseY, mode}
     for (const entry of cfg.structures) {
       for (const phase of entry.phases) {
+        if (this.skip.has('roads') && ['road', 'plaza'].includes(phase.build)) continue;
+        if (this.skip.has('lamps') && phase.build === 'lampline') continue;
         const g = buildStructure(entry, phase, cfg.terrain.heightAt);
         g.visible = false;
         this.scene.add(g);
@@ -65,14 +93,14 @@ export class World {
           sinkDepth: phase.sinkDepth ?? 14,
           // terrain-anchored groups (children placed at absolute heights)
           // emerge by sliding up rather than scaling from the group origin
-          slide: ['palisade', 'rampart', 'road', 'plaza'].includes(phase.build),
+          slide: ['palisade', 'rampart', 'road', 'plaza', 'lampline'].includes(phase.build),
         });
       }
     }
     progress(0.55, 'Building the churches…');
 
     // --- districts: scattered generic fabric per era phase ---
-    for (const d of cfg.districts || []) {
+    for (const d of (this.skip.has('districts') ? [] : cfg.districts || [])) {
       for (const phase of d.phases) {
         const g = this._buildDistrict(d, phase);
         g.visible = false;
@@ -95,8 +123,10 @@ export class World {
     this.scene.add(this.boats.group);
     this.crowds = new Crowds(cfg.effects?.crowds || [], heightAt);
     this.scene.add(this.crowds.group);
-    this.groves = new Groves(cfg.effects?.groves || [], heightAt);
+    this.groves = new Groves(cfg.effects?.groves || [], heightAt, (x, z) => this._isExcluded(x, z, 2));
     this.scene.add(this.groves.group);
+    this.traffic = new Traffic(this.skip.has('traffic') ? [] : (cfg.effects?.traffic || []), heightAt);
+    this.scene.add(this.traffic.group);
     progress(1, 'Opening the gates…');
   }
 
@@ -112,6 +142,7 @@ export class World {
       const z = d.area[1] + Math.sin(ang) * rr * d.area[3];
       const y = heightAt(x, z);
       if (y < (this.cfg.terrain.waterLevel ?? 2) + 1) continue;
+      if (this._isExcluded(x, z)) continue;
       const style = styles[Math.floor(r() * styles.length)];
       const gen = generators[style.gen || style];
       if (!gen) continue;
@@ -126,6 +157,24 @@ export class World {
       g.add(b);
     }
     return g;
+  }
+
+  // pad: extra clearance beyond the shape itself (large for buildings so
+  // their walls clear the roadway, small for trees so boulevards stay lined)
+  _isExcluded(x, z, pad = 14) {
+    for (const [cx, cz, r] of this._excl.discs) {
+      const rr = r + pad * 0.4;
+      const dx = x - cx, dz = z - cz;
+      if (dx * dx + dz * dz < rr * rr) return true;
+    }
+    for (const [x1, z1, x2, z2, hw] of this._excl.segs) {
+      const rr = hw + pad;
+      const abx = x2 - x1, abz = z2 - z1;
+      const t = Math.max(0, Math.min(1, ((x - x1) * abx + (z - z1) * abz) / (abx * abx + abz * abz || 1)));
+      const dx = x - (x1 + abx * t), dz = z - (z1 + abz * t);
+      if (dx * dx + dz * dz < rr * rr) return true;
+    }
+    return false;
   }
 
   // env keyframe interpolation between adjacent stops
@@ -188,6 +237,7 @@ export class World {
     this.boats.update(this.clockT, t.year, dt);
     this.crowds.update(t.year);
     this.groves.update(t.year);
+    this.traffic.update(this.clockT, t.year);
     this.water.uniforms.uTime.value = this.clockT;
     if (this.terrain.userData.uYear) this.terrain.userData.uYear.value = t.year;
 
