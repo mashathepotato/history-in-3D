@@ -50,8 +50,8 @@ export class FireSystem {
               p.x += sin(life * 9.0 + aSeed * 40.0) * (0.5 + uSmoke * 2.5) * life;
               p.z += cos(life * 7.0 + aSeed * 31.0) * (0.5 + uSmoke * 2.5) * life;
               vec4 mv = modelViewMatrix * vec4(p, 1.0);
-              float size = uSmoke > 0.5 ? (6.0 + life * 26.0) : (7.0 * (1.0 - life) + 2.0);
-              gl_PointSize = size * (180.0 / -mv.z);
+              float size = uSmoke > 0.5 ? (8.0 + life * 34.0) : (9.0 * (1.0 - life) + 2.5);
+              gl_PointSize = size * (300.0 / -mv.z);
               gl_Position = projectionMatrix * mv;
             }`,
           fragmentShader: /* glsl */`
@@ -64,7 +64,7 @@ export class FireSystem {
               if (d > 0.5) discard;
               float soft = smoothstep(0.5, 0.1, d);
               if (uSmoke > 0.5) {
-                float a = soft * (1.0 - vLife) * 0.30 * uIntensity;
+                float a = soft * (1.0 - vLife) * 0.45 * uIntensity;
                 gl_FragColor = vec4(vec3(0.16, 0.15, 0.14), a);
               } else {
                 vec3 c = mix(vec3(1.0, 0.85, 0.3), vec3(0.9, 0.25, 0.05), vLife);

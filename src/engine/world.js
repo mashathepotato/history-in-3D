@@ -61,7 +61,7 @@ export class World {
         this.scene.add(g);
         this.animated.push({
           group: g, from: phase.from, to: phase.to ?? 9999,
-          rise: phase.rise, baseY: g.position.y,
+          rise: phase.rise, fall: phase.fall, baseY: g.position.y,
           sinkDepth: phase.sinkDepth ?? 14,
           // terrain-anchored groups (children placed at absolute heights)
           // emerge by sliding up rather than scaling from the group origin
@@ -79,7 +79,7 @@ export class World {
         this.scene.add(g);
         this.animated.push({
           group: g, from: phase.from, to: phase.to ?? 9999,
-          rise: phase.rise ?? 10, baseY: 0, isDistrict: true, sinkDepth: 8,
+          rise: phase.rise ?? 10, fall: phase.fall, baseY: 0, isDistrict: true, sinkDepth: 8,
         });
       }
     }
@@ -166,7 +166,7 @@ export class World {
 
     // structures presence
     for (const a of this.animated) {
-      const p = t.presence(a.from, a.to, a.rise);
+      const p = t.presence(a.from, a.to, a.rise, a.fall);
       const vis = p > 0.003;
       if (a.group.visible !== vis) a.group.visible = vis;
       if (!vis) continue;

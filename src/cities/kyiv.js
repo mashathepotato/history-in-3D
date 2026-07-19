@@ -87,7 +87,7 @@ export function buildConfig() {
 
       // -- Perun and the pagan pantheon (980–988) --
       { id: 'perun', pos: [-70, -255], phases: [
-        { from: 980, to: 988, build: 'idol', params: { h: 7 }, rise: 2, sinkDepth: 20 },
+        { from: 980, to: 988, build: 'idol', params: { h: 7 }, rise: 2, fall: 0.3, sinkDepth: 20 },
       ]},
 
       // -- City of Volodymyr rampart --
@@ -100,7 +100,7 @@ export function buildConfig() {
         { from: 996, to: 1240, build: 'church', params: { ...PLINFA, w: 26, d: 32, h: 15, apses: 3, galleries: true,
           domeStyle: 'helmet', domeColor: '#a8b2c0',
           domes: [{ x: 0, z: -2, r: 4.4, drumH: 7 }, { x: -7, z: 6, r: 2.6, drumH: 5 }, { x: 7, z: 6, r: 2.6, drumH: 5 },
-                  { x: -7, z: -10, r: 2.6, drumH: 5 }, { x: 7, z: -10, r: 2.6, drumH: 5 }] }, rise: 7, sinkDepth: 18 },
+                  { x: -7, z: -10, r: 2.6, drumH: 5 }, { x: 7, z: -10, r: 2.6, drumH: 5 }] }, rise: 7, fall: 0.4, sinkDepth: 18 },
         { from: 1240, to: 1828, build: 'ruin', params: { seed: 12, n: 18, spread: 26, maxSize: 5, wallStub: [18, 6], color: '#b09a86' }, rise: 3 },
       ]},
 
@@ -135,14 +135,14 @@ export function buildConfig() {
 
       // -- Golden Gate, ca. 1024–1037; ruined 1240; reconstructed 1982 --
       { id: 'golden-gate', pos: [-435, -168], rotY: 1.15, phases: [
-        { from: 1037, to: 1240, build: 'gate', params: { ...PLINFA, w: 17, h: 15, d: 13, chapel: true, domeStyle: 'helmet' }, rise: 13 },
+        { from: 1037, to: 1240, build: 'gate', params: { ...PLINFA, w: 17, h: 15, d: 13, chapel: true, domeStyle: 'helmet' }, rise: 13, fall: 0.6 },
         { from: 1240, to: 1750, build: 'gate', params: { ...PLINFA, w: 17, h: 9, d: 13, chapel: false }, rise: 3 },
         { from: 1982, to: 9999, build: 'gate', params: { wallStyle: 'log', w: 17, h: 16, d: 13, chapel: true, domeStyle: 'helmet' }, rise: 2 },
       ]},
 
       // -- Ramparts of Yaroslav, 1037; breached 1240; traces to the 1830s --
       { id: 'yaroslav-wall', pos: [0, 0], phases: [
-        { from: 1037, to: 1240, build: 'rampart', params: { path: YAROSLAV_WALL, earthH: 12, wallH: 5 }, rise: 14 },
+        { from: 1037, to: 1240, build: 'rampart', params: { path: YAROSLAV_WALL, earthH: 12, wallH: 5 }, rise: 14, fall: 0.8 },
         { from: 1240, to: 1837, build: 'rampart', params: { path: YAROSLAV_WALL, earthH: 6, wallH: 0.5, towers: false }, rise: 3 },
       ]},
 
@@ -158,7 +158,7 @@ export function buildConfig() {
             { x: -7, z: 6, r: 2.2, drumH: 6 }, { x: 7, z: 6, r: 2.2, drumH: 6 },
             { x: -7, z: -10, r: 2.2, drumH: 6 }, { x: 7, z: -10, r: 2.2, drumH: 6 },
             { x: 0, z: 10, r: 2, drumH: 5 }, { x: 0, z: -13, r: 2, drumH: 5 },
-          ] }, sinkDepth: 22 },
+          ] }, fall: 0.8, sinkDepth: 22 },
         { from: 1999, to: 9999, rise: 2.5, build: 'church', params: { wallStyle: 'baroque', wall: '#9fc6e8', accent: '#f2f4f6',
           w: 24, d: 30, h: 16, apses: 3, domeStyle: 'pear', domeColor: 'gold',
           domes: [
@@ -179,7 +179,7 @@ export function buildConfig() {
         { from: 1729, to: 1941, rise: 8, build: 'church', params: { wallStyle: 'baroque', wall: '#f4efe2', accent: '#cbb87a',
           w: 26, d: 32, h: 16, apses: 3, domeStyle: 'pear', domeColor: 'gold',
           domes: [{ x: 0, z: -2, r: 4.6, drumH: 9 }, { x: -8, z: 6, r: 2.2, drumH: 6 }, { x: 8, z: 6, r: 2.2, drumH: 6 },
-                  { x: -8, z: -10, r: 2.2, drumH: 6 }, { x: 8, z: -10, r: 2.2, drumH: 6 }] }, sinkDepth: 20 },
+                  { x: -8, z: -10, r: 2.2, drumH: 6 }, { x: 8, z: -10, r: 2.2, drumH: 6 }] }, fall: 0.4, sinkDepth: 20 },
         { from: 1941.9, to: 1998, build: 'ruin', params: { seed: 31, n: 16, spread: 24, maxSize: 5, wallStub: [16, 5], color: '#d9cdb6' }, rise: 1 },
         { from: 2000, to: 9999, rise: 2, build: 'church', params: { wallStyle: 'baroque', wall: '#f4efe2', accent: '#cbb87a',
           w: 26, d: 32, h: 16, apses: 3, domeStyle: 'pear', domeColor: 'gold',
@@ -196,7 +196,7 @@ export function buildConfig() {
 
       // -- Lithuanian wooden castle on Zamkova Hora, ~1370s – mid-1600s --
       { id: 'castle', pos: [-20, -470], rotY: 0.5, phases: [
-        { from: 1374, to: 1651, build: 'woodCastle', params: {}, rise: 10, sinkDepth: 20 },
+        { from: 1374, to: 1651, build: 'woodCastle', params: {}, rise: 10, fall: 2, sinkDepth: 20 },
       ]},
 
       // -- Podil institutions --
@@ -267,19 +267,19 @@ export function buildConfig() {
       // Starokyivska hilltop settlement
       { id: 'old-hill', area: [-120, -320, 120, 90], seed: 101, phases: [
         { from: 490, to: 900, style: { gen: 'dugout', vary: { size: [3.2, 4.8] } }, count: 38, rise: 30 },
-        { from: 900, to: 1240, style: { gen: 'hut', vary: { w: [4, 6.5], d: [3.5, 5] } }, count: 42, rise: 40 },
+        { from: 900, to: 1240, style: { gen: 'hut', vary: { w: [4, 6.5], d: [3.5, 5] } }, count: 42, rise: 40, fall: 1 },
         { from: 1600, to: 1830, style: { gen: 'hut', vary: { w: [4.5, 7], d: [4, 6] } }, count: 18, rise: 60 },
       ]},
       // Upper town inside Yaroslav's walls
       { id: 'upper-town', area: [-240, -220, 200, 150], seed: 202, phases: [
-        { from: 1040, to: 1240, style: { gen: 'hut', vary: { w: [4, 7], d: [3.5, 5.5] } }, count: 70, rise: 40 },
+        { from: 1040, to: 1240, style: { gen: 'hut', vary: { w: [4, 7], d: [3.5, 5.5] } }, count: 70, rise: 40, fall: 1 },
         { from: 1250, to: 1650, style: { gen: 'hut', vary: { w: [4, 6], d: [3.5, 5] } }, count: 8, rise: 60 },   // near-empty ruins era
         { from: 1650, to: 1850, style: { gen: 'hut', vary: { w: [4.5, 7], d: [4, 6] } }, count: 34, rise: 50 },
         { from: 1850, to: 1950, style: { gen: 'townhouse', vary: { w: [10, 16], d: [8, 12], floors: [2, 4.4] } }, count: 46, rise: 25 },
-        { from: 1950, to: 9999, style: [
+        { from: 1958, to: 9999, style: [
           { gen: 'townhouse', vary: { w: [10, 16], d: [8, 12], floors: [3, 5.4] } },
           { gen: 'stalinka', vary: { w: [20, 30], d: [12, 16], floors: [5, 7.5] } },
-        ], count: 52, rise: 12 },
+        ], count: 52, rise: 8 },
       ]},
       // Podil: the riverside town that never died
       { id: 'podil', area: [200, -600, 170, 190], seed: 303, gridAngle: 0.25, phases: [
@@ -287,14 +287,15 @@ export function buildConfig() {
         { from: 1350, to: 1811, style: [
           { gen: 'hut', vary: { w: [4.5, 7], d: [4, 6] } },
           { gen: 'woodChurch', vary: {} },
-        ], count: 74, rise: 60 },
+        ], count: 74, rise: 60, fall: 1 },
         { from: 1815, to: 9999, style: { gen: 'townhouse', vary: { w: [10, 15], d: [8, 12], floors: [2, 3.8] } }, count: 64, rise: 25 },
       ]},
       // Khreshchatyk valley: nothing → 19th-c. street → ruins are handled by era
       { id: 'khreshchatyk', area: [110, 60, 70, 180], seed: 404, gridAngle: -0.45, phases: [
         { from: 1810, to: 1870, style: { gen: 'hut', vary: { w: [5, 8], d: [4, 6] } }, count: 20, rise: 20 },
-        { from: 1870, to: 1941.7, style: { gen: 'townhouse', vary: { w: [12, 18], d: [10, 14], floors: [3, 4.9] } }, count: 40, rise: 18, sinkDepth: 12 },
-        { from: 1949, to: 9999, style: { gen: 'stalinka', vary: { w: [26, 38], d: [14, 20], floors: [6, 8.9] } }, count: 26, rise: 11 },
+        { from: 1870, to: 1941.7, style: { gen: 'townhouse', vary: { w: [12, 18], d: [10, 14], floors: [3, 4.9] } }, count: 40, rise: 18, fall: 0.4, sinkDepth: 12 },
+        { from: 1941.9, to: 1949.5, style: { gen: 'ruin', vary: { n: [4, 7], spread: [8, 14], maxSize: [2, 3.5] } }, count: 30, rise: 0.4, fall: 3 },
+        { from: 1957, to: 9999, style: { gen: 'stalinka', vary: { w: [26, 38], d: [14, 20], floors: [6, 8.9] } }, count: 26, rise: 8 },
       ]},
       // Pechersk fabric
       { id: 'pechersk', area: [140, 380, 200, 220], seed: 505, phases: [
@@ -336,8 +337,8 @@ export function buildConfig() {
         // 2014 Maidan barricade smoke
         { pos: [115, 18, -30], radius: 30, from: 2013.9, to: 2014.2, intensity: 0.6 },
         // 2022: war on the horizon (Irpin/Hostomel to the northwest)
-        { pos: [-1150, 30, -1000], radius: 160, from: 2022.12, to: 2022.28, intensity: 1 },
-        { pos: [-950, 30, -1150], radius: 140, from: 2022.12, to: 2022.28, intensity: 0.8 },
+        { pos: [-1050, 40, -900], radius: 160, from: 2022.12, to: 2022.35, intensity: 1 },
+        { pos: [-820, 45, -1100], radius: 140, from: 2022.12, to: 2022.35, intensity: 0.9 },
       ],
       boats: [
         { from: 860, to: 1300, style: 'longship', path: riverPath, speed: 0.006 },
@@ -532,12 +533,12 @@ export function buildConfig() {
         context: `The Maidan revolutions were fought over one question: does Ukraine belong to the imperial past or the European future? Russia answered by seizing Crimea and igniting war in the Donbas within weeks. The square's name entered the world's languages — "maidan" now means a people refusing to be ruled without consent.`,
       },
       {
-        year: 2022, major: true, title: 'The City That Held', kicker: 'Full-scale invasion · 24 February 2022',
+        year: 2022.2, major: true, title: 'The City That Held', kicker: 'Full-scale invasion · 24 February 2022',
         caption: 'Kyiv in three days, they said.',
         transitTitle: 'Sirens over the Dnipro…',
-        camera: { pos: [-240, 160, -680], look: [-30, 60, -290] },
+        camera: { pos: [240, 150, -330], look: [-420, 40, -720] },
         env: { skyTop: '#4a5560', skyBottom: '#8a8070', sunDir: [0.3, 0.25, -0.55], sunColor: '#d0b890', sunIntensity: 1.2, ambient: 0.55, fogColor: '#787468', fogDensity: 0.0015, haze: 0.8 },
-        story: `<p>On <b>24 February 2022</b> Russia launched a full-scale invasion, expecting to take Kyiv in days. Paratroopers struck Hostomel airfield on the northwest edge; a 64-kilometre armoured column crawled toward the city. Kyiv answered with flooded rivers, blown bridges, anti-tank hedgehogs on Khreshchatyk — you can see them below — and its people queuing for rifles.</p>
+        story: `<p>On <b>24 February 2022</b> Russia launched a full-scale invasion, expecting to take Kyiv in days. Paratroopers struck Hostomel airfield on the northwest edge; a 64-kilometre armoured column crawled toward the city. Kyiv answered with flooded rivers, blown bridges, anti-tank hedgehogs on the boulevards, and its people queuing for rifles.</p>
 <p>The column never arrived. By <b>2 April 2022</b> the whole Kyiv region was liberated, leaving behind the murdered civilians of <b>Bucha</b> and Irpin as evidence of what occupation meant. The smoke on the northwestern horizon is that battle.</p>`,
         context: `For the third time in a century — 1918–21, 1941–43, 2022 — Kyiv became a battlefield of European history. In August 2023 the Soviet coat of arms on the Motherland Monument was cut away and replaced with the Ukrainian <b>trident</b>: the thousand-year-old mark of Volodymyr's dynasty, back on the city's tallest shoulder.`,
       },

@@ -124,9 +124,9 @@ export class Timeline {
 
   // presence of a structure phase at current year: 0 = absent, 1 = fully there.
   // Buildings rise as year crosses `from` and fall as it crosses `to`.
-  presence(from, to, riseSpan) {
+  presence(from, to, riseSpan, fallSpan) {
     const rise = riseSpan ?? Math.max(4, (to - from) * 0.04);
-    const fall = Math.max(2, rise * 0.5);
+    const fall = fallSpan ?? Math.max(2, rise * 0.5);
     const inP = smoothstep(from - rise, from, this.year);
     const outP = 1 - smoothstep(to, to + fall, this.year);
     return clamp01(Math.min(inP, outP));

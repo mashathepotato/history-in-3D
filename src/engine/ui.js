@@ -34,14 +34,14 @@ export class UI {
       const tick = document.createElement('div');
       tick.className = 'tick' + (s.major ? ' major' : '');
       tick.style.left = `${u * 100}%`;
-      tick.title = `${s.year} — ${s.title}`;
+      tick.title = `${Math.round(s.year)} — ${s.title}`;
       tick.addEventListener('click', (e) => { e.stopPropagation(); this.goTo(i); });
       this.el.ticks.appendChild(tick);
       if (s.major || i === 0 || i === stops.length - 1) {
         const lb = document.createElement('div');
         lb.className = 'tlabel';
         lb.style.left = `${u * 100}%`;
-        lb.textContent = s.year;
+        lb.textContent = Math.round(s.year);
         this.el.labels.appendChild(lb);
       }
     });
