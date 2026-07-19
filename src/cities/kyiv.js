@@ -59,6 +59,10 @@ function heightAt(x, z) {
 const riverPath = [];
 for (let z = -1150; z <= 1150; z += 140) riverPath.push([riverX(z) + 20 * Math.sin(z * 0.01), z]);
 
+// embankment road hugs the right bank
+const EMBANKMENT = [];
+for (let z = -900; z <= 900; z += 150) EMBANKMENT.push([riverX(z) - 180, z]);
+
 // ---------- rampart paths ----------
 const KYI_FORT = [[-160, -360], [-80, -380], [-40, -330], [-90, -280], [-160, -300], [-160, -360]];
 const VOLODYMYR_WALL = [[-220, -390], [-90, -420], [-5, -330], [-60, -235], [-190, -230], [-250, -300], [-220, -390]];
@@ -76,6 +80,20 @@ export function buildConfig() {
       waterLevel: WATER_Y,
       grassColor: '#5c7345', dirtColor: '#8a7a58', sandColor: '#b5a377',
       waterDeep: '#22506b', waterShallow: '#3f7d96',
+      // the city footprint grows over the centuries: meadow -> town -> pavement
+      urbanZones: [
+        { x: 220, z: -600, rx: 200, rz: 210, year: 900, strength: 0.32 },   // medieval Podil
+        { x: -160, z: -280, rx: 260, rz: 200, year: 1045, strength: 0.28 }, // city of Yaroslav
+        { x: 220, z: -600, rx: 215, rz: 225, year: 1850, strength: 0.55 },  // Podil paved
+        { x: -160, z: -250, rx: 300, rz: 250, year: 1875, strength: 0.5 },  // upper town paved
+        { x: 110, z: 60, rx: 150, rz: 250, year: 1855, strength: 0.62 },    // Khreshchatyk
+        { x: -350, z: 120, rx: 230, rz: 230, year: 1885, strength: 0.45 },  // university quarter
+        { x: 170, z: 430, rx: 290, rz: 290, year: 1895, strength: 0.48 },   // Pechersk
+        { x: 1000, z: -420, rx: 290, rz: 340, year: 1968, strength: 0.5 },  // left bank north
+        { x: 1010, z: 300, rx: 290, rz: 350, year: 1962, strength: 0.5 },   // left bank south
+        { x: 280, z: -960, rx: 250, rz: 210, year: 1978, strength: 0.5 },   // Obolon
+        { x: 450, z: 280, rx: 210, rz: 250, year: 2000, strength: 0.45 },   // business district
+      ],
     },
 
     // ================= STRUCTURES =================
@@ -260,7 +278,83 @@ export function buildConfig() {
       { id: 'hedgehogs-khreshchatyk', pos: [110, 20], phases: [
         { from: 2022.1, to: 2023.3, build: 'hedgehogs', params: { n: 12, spread: 90, seed: 8 }, rise: 0.3 },
       ]},
+
+      // ================= ROADS & SQUARES =================
+      // The oldest street: down from the upper city to Podil's harbour.
+      { id: 'road-descent', pos: [0, 0], phases: [
+        { from: 1000, to: 1880, build: 'road', params: { path: [[-90, -330], [-30, -430], [25, -505], [70, -530]], w: 6, color: 0x84714f }, rise: 40 },
+        { from: 1880, to: 9999, build: 'road', params: { path: [[-90, -330], [-30, -430], [25, -505], [70, -530]], w: 8, color: 0x8d8578 }, rise: 8 },
+      ]},
+      { id: 'road-podil-main', pos: [0, 0], phases: [
+        { from: 920, to: 1870, build: 'road', params: { path: [[70, -530], [150, -565], [230, -600], [330, -645]], w: 6, color: 0x84714f }, rise: 40 },
+        { from: 1870, to: 9999, build: 'road', params: { path: [[70, -530], [150, -565], [230, -600], [330, -645]], w: 10, color: 0x8d8578 }, rise: 10 },
+      ]},
+      { id: 'road-podil-cross', pos: [0, 0], phases: [
+        { from: 1000, to: 1880, build: 'road', params: { path: [[160, -480], [200, -560], [235, -650], [255, -730]], w: 5, color: 0x84714f }, rise: 50 },
+        { from: 1880, to: 9999, build: 'road', params: { path: [[160, -480], [200, -560], [235, -650], [255, -730]], w: 8, color: 0x8d8578 }, rise: 10 },
+      ]},
+      // Through the Golden Gate, past Sophia — the spine of the upper city.
+      { id: 'road-upper', pos: [0, 0], phases: [
+        { from: 1045, to: 1875, build: 'road', params: { path: [[-435, -168], [-320, -195], [-200, -255], [-90, -330]], w: 7, color: 0x84714f }, rise: 20 },
+        { from: 1875, to: 1958, build: 'road', params: { path: [[-435, -168], [-320, -195], [-200, -255], [-90, -330]], w: 10, color: 0x8d8578 }, rise: 8 },
+        { from: 1958, to: 9999, build: 'road', params: { path: [[-435, -168], [-320, -195], [-200, -255], [-90, -330]], w: 11, color: 0x4f5257 }, rise: 4 },
+      ]},
+      // Volodymyrska: gate -> university -> St. Volodymyr's.
+      { id: 'road-volodymyrska', pos: [0, 0], phases: [
+        { from: 1845, to: 1962, build: 'road', params: { path: [[-435, -168], [-385, -30], [-335, 85], [-355, 190]], w: 10, color: 0x8d8578 }, rise: 8 },
+        { from: 1962, to: 9999, build: 'road', params: { path: [[-435, -168], [-385, -30], [-335, 85], [-355, 190]], w: 11, color: 0x4f5257 }, rise: 4 },
+      ]},
+      // Khreshchatyk itself: cobbled canyon, mined 1941, reborn as a 75m boulevard.
+      { id: 'road-khreshchatyk', pos: [0, 0], phases: [
+        { from: 1845, to: 1943, build: 'road', params: { path: [[180, -140], [115, 30], [62, 160], [40, 280]], w: 20, color: 0x8d8578 }, rise: 12 },
+        { from: 1952, to: 9999, build: 'road', params: { path: [[180, -140], [115, 30], [62, 160], [40, 280]], w: 40, color: 0x4f5257 }, rise: 6 },
+      ]},
+      { id: 'road-pechersk', pos: [0, 0], phases: [
+        { from: 1875, to: 1955, build: 'road', params: { path: [[62, 160], [140, 300], [195, 450], [225, 600]], w: 10, color: 0x8d8578 }, rise: 10 },
+        { from: 1955, to: 9999, build: 'road', params: { path: [[62, 160], [140, 300], [195, 450], [225, 600]], w: 13, color: 0x4f5257 }, rise: 4 },
+      ]},
+      { id: 'road-embankment', pos: [0, 0], phases: [
+        { from: 1955, to: 9999, build: 'road', params: { path: EMBANKMENT, w: 13, color: 0x4f5257 }, rise: 5 },
+      ]},
+      // bridge approaches and left-bank arteries
+      { id: 'road-paton', pos: [0, 0], phases: [
+        { from: 1953, to: 9999, build: 'road', params: { path: [[40, 280], [230, 296], [438, 300]], w: 12, color: 0x4f5257 }, rise: 4 },
+      ]},
+      { id: 'road-paton-left', pos: [0, 0], phases: [
+        { from: 1953, to: 9999, build: 'road', params: { path: [[894, 300], [1030, 300], [1180, 302]], w: 12, color: 0x4f5257 }, rise: 4 },
+      ]},
+      { id: 'road-metro-appr', pos: [0, 0], phases: [
+        { from: 1965, to: 9999, build: 'road', params: { path: [[180, -140], [320, -100], [432, -62]], w: 11, color: 0x4f5257 }, rise: 4 },
+      ]},
+      { id: 'road-metro-left', pos: [0, 0], phases: [
+        { from: 1965, to: 9999, build: 'road', params: { path: [[878, -58], [1020, -56], [1180, -54]], w: 11, color: 0x4f5257 }, rise: 4 },
+      ]},
+      { id: 'road-leftbank-ave', pos: [0, 0], phases: [
+        { from: 1962, to: 9999, build: 'road', params: { path: [[860, -750], [900, -300], [915, 100], [935, 600]], w: 14, color: 0x4f5257 }, rise: 6 },
+      ]},
+      { id: 'road-obolon', pos: [0, 0], phases: [
+        { from: 1976, to: 9999, build: 'road', params: { path: [[180, -140], [220, -450], [250, -800], [270, -1080]], w: 12, color: 0x4f5257 }, rise: 5 },
+      ]},
+      // squares
+      { id: 'plaza-kontraktova', pos: [220, -600], phases: [
+        { from: 1500, to: 9999, build: 'plaza', params: { rx: 36, rz: 30, color: 0x8d8578 }, rise: 25 },
+      ]},
+      { id: 'plaza-sofia', pos: [-252, -150], phases: [
+        { from: 1706, to: 9999, build: 'plaza', params: { rx: 38, rz: 32, color: 0x8d8578 }, rise: 8 },
+      ]},
+      { id: 'plaza-mykhailivska', pos: [-70, -278], phases: [
+        { from: 1750, to: 9999, build: 'plaza', params: { rx: 32, rz: 28, color: 0x8d8578 }, rise: 8 },
+      ]},
+      { id: 'plaza-lavra', pos: [302, 528], phases: [
+        { from: 1720, to: 9999, build: 'plaza', params: { rx: 48, rz: 42, color: 0x9a9184 }, rise: 10 },
+      ]},
+      { id: 'plaza-maidan', pos: [115, -35], phases: [
+        { from: 1876, to: 1976, build: 'plaza', params: { rx: 46, rz: 42, color: 0x8d8578 }, rise: 8 },
+        { from: 1976, to: 9999, build: 'plaza', params: { rx: 50, rz: 45, color: 0x9a938c }, rise: 3 },
+      ]},
     ],
+
+
 
     // ================= DISTRICTS (generic fabric) =================
     districts: [
@@ -307,14 +401,17 @@ export function buildConfig() {
       // Left bank: villages → panelki sea → glass
       { id: 'left-bank-north', area: [1000, -450, 220, 280], seed: 606, gridAngle: 0.1, phases: [
         { from: 1600, to: 1960, style: { gen: 'hut', vary: { w: [4.5, 7], d: [4, 6] } }, count: 22, rise: 80 },
-        { from: 1975, to: 9999, style: { gen: 'panelka', vary: { w: [22, 34], d: [11, 14], floors: [9, 16.9] } }, count: 42, rise: 10 },
+        { from: 1975, to: 9999, style: { gen: 'panelka', vary: { w: [22, 34], d: [11, 14], floors: [9, 16.9] } }, count: 58, rise: 10 },
       ]},
       { id: 'left-bank-south', area: [1010, 260, 230, 300], seed: 707, gridAngle: -0.15, phases: [
         { from: 1650, to: 1955, style: { gen: 'hut', vary: { w: [4.5, 7], d: [4, 6] } }, count: 18, rise: 80 },
-        { from: 1962, to: 9999, style: { gen: 'panelka', vary: { w: [22, 34], d: [11, 14], floors: [5, 12.9] } }, count: 48, rise: 12 },
+        { from: 1962, to: 9999, style: { gen: 'panelka', vary: { w: [22, 34], d: [11, 14], floors: [5, 12.9] } }, count: 62, rise: 12 },
+      ]},
+      { id: 'obolon', area: [280, -960, 210, 170], seed: 909, gridAngle: 0.2, phases: [
+        { from: 1978, to: 9999, style: { gen: 'panelka', vary: { w: [24, 36], d: [11, 14], floors: [9, 16.9] } }, count: 34, rise: 8 },
       ]},
       { id: 'modern-towers', area: [420, 240, 140, 200], seed: 808, phases: [
-        { from: 2003, to: 9999, style: { gen: 'glassTower', vary: { w: [14, 22], d: [14, 22], h: [50, 110] } }, count: 14, rise: 6 },
+        { from: 2003, to: 9999, style: { gen: 'glassTower', vary: { w: [14, 22], d: [14, 22], h: [50, 110] } }, count: 22, rise: 6 },
       ]},
     ],
 

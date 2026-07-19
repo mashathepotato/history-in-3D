@@ -65,7 +65,7 @@ export class World {
           sinkDepth: phase.sinkDepth ?? 14,
           // terrain-anchored groups (children placed at absolute heights)
           // emerge by sliding up rather than scaling from the group origin
-          slide: phase.build === 'palisade' || phase.build === 'rampart',
+          slide: ['palisade', 'rampart', 'road', 'plaza'].includes(phase.build),
         });
       }
     }
@@ -189,6 +189,7 @@ export class World {
     this.crowds.update(t.year);
     this.groves.update(t.year);
     this.water.uniforms.uTime.value = this.clockT;
+    if (this.terrain.userData.uYear) this.terrain.userData.uYear.value = t.year;
 
     return seg;
   }

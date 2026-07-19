@@ -572,6 +572,79 @@ export const generators = {
     return g;
   },
 
+  // Road ribbon draped over the terrain along a [x,z] polyline.
+  // Styles are just colors: dirt, cobble, asphalt.
+  road(p = {}) {
+    const hAt = p.heightAt || (() => 0);
+    const w = p.w || 8;
+    const pts = p.path || [];
+    const samples = [];
+    for (let i = 0; i < pts.length - 1; i++) {
+      const [x1, z1] = pts[i], [x2, z2] = pts[i + 1];
+      const len = Math.hypot(x2 - x1, z2 - z1);
+      const n = Math.max(1, Math.ceil(len / 10));
+      for (let j = 0; j < n; j++) samples.push([x1 + (x2 - x1) * j / n, z1 + (z2 - z1) * j / n]);
+    }
+    samples.push(pts[pts.length - 1]);
+    const pos = [], idx = [];
+    for (let i = 0; i < samples.length; i++) {
+      const [x, z] = samples[i];
+      const [xp, zp] = samples[Math.max(0, i - 1)];
+      const [xn, zn] = samples[Math.min(samples.length - 1, i + 1)];
+      let dx = xn - xp, dz = zn - zp;
+      const l = Math.hypot(dx, dz) || 1;
+      dx /= l; dz /= l;
+      const nx = -dz, nz = dx;
+      const ax = x + nx * w / 2, az = z + nz * w / 2;
+      const bx = x - nx * w / 2, bz = z - nz * w / 2;
+      pos.push(ax, hAt(ax, az) + 0.5, az, bx, hAt(bx, bz) + 0.5, bz);
+    }
+    for (let i = 0; i < samples.length - 1; i++) {
+      const a = i * 2;
+      idx.push(a, a + 1, a + 2, a + 1, a + 3, a + 2);
+    }
+    const geo = new THREE.BufferGeometry();
+    geo.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3));
+    geo.setIndex(idx);
+    geo.computeVertexNormals();
+    const m = new THREE.Mesh(geo, new THREE.MeshStandardMaterial({
+      color: p.color || 0x55585c, roughness: 1,
+      polygonOffset: true, polygonOffsetFactor: -2, polygonOffsetUnits: -2,
+    }));
+    m.receiveShadow = true;
+    const g = new THREE.Group();
+    g.add(m);
+    return g;
+  },
+
+  // Paved square draped over the terrain (ellipse footprint).
+  plaza(p = {}) {
+    const hAt = p.heightAt || (() => 0);
+    const rx = p.rx || 40, rz = p.rz || 40;
+    const cx = p.x || 0, cz = p.z || 0;
+    const seg = 10;
+    const geo = new THREE.PlaneGeometry(rx * 2, rz * 2, seg, seg);
+    geo.rotateX(-Math.PI / 2);
+    const posA = geo.attributes.position;
+    for (let i = 0; i < posA.count; i++) {
+      let vx = posA.getX(i), vz = posA.getZ(i);
+      const r = Math.hypot(vx / rx, vz / rz);
+      if (r > 1) { vx /= r; vz /= r; }        // clamp grid to the ellipse
+      posA.setX(i, vx); posA.setZ(i, vz);
+      posA.setY(i, hAt(cx + vx, cz + vz) + 0.45);
+    }
+    geo.computeVertexNormals();
+    const m = new THREE.Mesh(geo, new THREE.MeshStandardMaterial({
+      color: p.color || 0x8d8578, roughness: 1,
+      polygonOffset: true, polygonOffsetFactor: -2, polygonOffsetUnits: -2,
+    }));
+    m.receiveShadow = true;
+    m.position.set(cx, 0, cz);
+    const g = new THREE.Group();
+    g.add(m);
+    return g;
+  },
+
   // Rubble mound for destroyed structures.
   ruin(p = {}) {
     const g = new THREE.Group();
@@ -618,8 +691,9 @@ export const generators = {
 export function buildStructure(entry, phase, terrainHeightAt) {
   const gen = generators[phase.build];
   if (!gen) { console.warn(`Unknown generator: ${phase.build}`); return new THREE.Group(); }
-  const pathBased = phase.build === 'palisade' || phase.build === 'rampart';
+  const pathBased = ['palisade', 'rampart', 'road', 'plaza'].includes(phase.build);
   const params = pathBased ? { ...(phase.params || {}), heightAt: terrainHeightAt } : (phase.params || {});
+  if (phase.build === 'plaza') { params.x = entry.pos[0]; params.z = entry.pos[1]; }
   const g = gen(params);
   const [x, z] = entry.pos;
   const y = pathBased ? 0 : (phase.y ?? (terrainHeightAt ? terrainHeightAt(x, z) : 0));

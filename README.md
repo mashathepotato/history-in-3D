@@ -51,6 +51,11 @@ St. Sophia in 1030 and scrolling forward.
   Maidan of 2014), fires and smoke for the sack of 1240 and the war years.
 - **Environment**: sky, sun, fog and water are keyframed per era — the amber
   haze of the Mongol sack, the grey of 1943, the clear light of independence.
+- **The ground itself urbanizes**: meadows turn to dusty medieval town and
+  then to pavement as each district's urbanization year passes; dirt tracks
+  become cobbled streets and squares, then asphalt boulevards, bridge
+  approaches and left-bank avenues — the terrain by 2026 reads as a paved
+  city, the terrain of 900 as a green riverside.
 
 Historical facts were researched against sources (Encyclopedia of Ukraine,
 UNESCO, academic reconstructions); where history is genuinely uncertain (the

@@ -34,11 +34,63 @@ export function buildTerrain(cfg) {
   geo.setAttribute('color', new THREE.BufferAttribute(colors, 3));
   geo.computeVertexNormals();
 
-  const mesh = new THREE.Mesh(geo, new THREE.MeshStandardMaterial({
+  // Urbanization: per-vertex strength + start year from config zones.
+  // The shader blends the natural ground toward a paved grey as the current
+  // year passes each zone's urbanization date — meadows become city.
+  // Each vertex keeps up to two urbanization events (e.g. Podil goes dusty
+  // medieval town in 900, then paved city in 1850) — the shader takes the max.
+  const zones = cfg.terrain.urbanZones || [];
+  const aUrban1 = new Float32Array(pos.count), aUYear1 = new Float32Array(pos.count);
+  const aUrban2 = new Float32Array(pos.count), aUYear2 = new Float32Array(pos.count);
+  for (let i = 0; i < pos.count; i++) {
+    const x = pos.getX(i), z = pos.getZ(i);
+    aUYear1[i] = aUYear2[i] = 99999;
+    if (pos.getY(i) < waterY + 1) continue;
+    const hits = [];
+    for (const zn of zones) {
+      const d = Math.hypot((x - zn.x) / zn.rx, (z - zn.z) / zn.rz);
+      if (d < 1) hits.push({ year: zn.year, s: zn.strength * (1 - d * d * 0.6) });
+    }
+    if (!hits.length) continue;
+    hits.sort((a, b) => a.year - b.year);
+    aUYear1[i] = hits[0].year; aUrban1[i] = hits[0].s;
+    let best = null;
+    for (const h of hits.slice(1)) if (!best || h.s > best.s) best = h;
+    if (best) { aUYear2[i] = best.year; aUrban2[i] = best.s; }
+  }
+  geo.setAttribute('aUrban1', new THREE.BufferAttribute(aUrban1, 1));
+  geo.setAttribute('aUYear1', new THREE.BufferAttribute(aUYear1, 1));
+  geo.setAttribute('aUrban2', new THREE.BufferAttribute(aUrban2, 1));
+  geo.setAttribute('aUYear2', new THREE.BufferAttribute(aUYear2, 1));
+
+  const material = new THREE.MeshStandardMaterial({
     vertexColors: true, flatShading: true, roughness: 1,
-  }));
+  });
+  const uYear = { value: 482 };
+  material.onBeforeCompile = (shader) => {
+    shader.uniforms.uYear = uYear;
+    shader.vertexShader = shader.vertexShader
+      .replace('#include <common>', `#include <common>
+        attribute float aUrban1;
+        attribute float aUYear1;
+        attribute float aUrban2;
+        attribute float aUYear2;
+        uniform float uYear;`)
+      .replace('#include <color_vertex>', `#include <color_vertex>
+        {
+          float u1 = smoothstep(aUYear1, aUYear1 + 55.0, uYear) * aUrban1;
+          float u2 = smoothstep(aUYear2, aUYear2 + 55.0, uYear) * aUrban2;
+          float urb = max(u1, u2);
+          // early urbanization reads dusty-brown, dense city reads paved grey
+          vec3 town = mix(vec3(0.55, 0.48, 0.38), vec3(0.46, 0.455, 0.45), smoothstep(0.25, 0.55, urb));
+          vColor.rgb = mix(vColor.rgb, town, urb);
+        }`);
+  };
+
+  const mesh = new THREE.Mesh(geo, material);
   mesh.receiveShadow = true;
   mesh.name = 'terrain';
+  mesh.userData.uYear = uYear;
   return mesh;
 }
 

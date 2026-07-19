@@ -70,7 +70,7 @@ async function start() {
     renderer.render(world.scene, camera);
     if (++firstFrames === 3) {
       loaderEl.classList.add('done');   // reveal once warm
-      setTimeout(() => loaderEl.remove(), 1500);
+      setTimeout(() => loaderEl.remove(), 800);
     }
     requestAnimationFrame(loop);
   }
