@@ -39,6 +39,14 @@ export class World {
     // --- terrain + water ---
     this.terrain = buildTerrain(cfg);
     this.scene.add(this.terrain);
+    // ground skirt: fades the map edge into the foggy horizon
+    const skirt = new THREE.Mesh(
+      new THREE.CircleGeometry(6000, 48),
+      new THREE.MeshStandardMaterial({ color: cfg.terrain.grassColor || '#5c7345', roughness: 1 }),
+    );
+    skirt.rotation.x = -Math.PI / 2;
+    skirt.position.y = 1.2;
+    this.scene.add(skirt);
     const water = buildWater(cfg);
     this.water = water;
     this.scene.add(water.mesh);
@@ -55,6 +63,9 @@ export class World {
           group: g, from: phase.from, to: phase.to ?? 9999,
           rise: phase.rise, baseY: g.position.y,
           sinkDepth: phase.sinkDepth ?? 14,
+          // terrain-anchored groups (children placed at absolute heights)
+          // emerge by sliding up rather than scaling from the group origin
+          slide: phase.build === 'palisade' || phase.build === 'rampart',
         });
       }
     }
@@ -159,11 +170,16 @@ export class World {
       const vis = p > 0.003;
       if (a.group.visible !== vis) a.group.visible = vis;
       if (!vis) continue;
-      const s = a.isDistrict ? p : easeOutBack(p);
-      a.group.scale.y = Math.max(0.002, s);
-      // sink a little while emerging/dying so bases don't float
-      const sink = (1 - p) * (t.year > a.to ? a.sinkDepth : 2);
-      a.group.position.y = a.baseY - sink;
+      if (a.isDistrict || a.slide) {
+        // children sit at absolute terrain heights: emerge by sliding up
+        a.group.scale.y = 1;
+        a.group.position.y = a.baseY - (1 - p) * a.sinkDepth;
+      } else {
+        a.group.scale.y = Math.max(0.002, easeOutBack(p));
+        // sink a little while emerging/dying so bases don't float
+        const sink = (1 - p) * (t.year > a.to ? a.sinkDepth : 2);
+        a.group.position.y = a.baseY - sink;
+      }
     }
 
     // effects

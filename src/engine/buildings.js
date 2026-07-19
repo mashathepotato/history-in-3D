@@ -234,25 +234,28 @@ export const generators = {
   },
 
   // Wooden palisade ring/wall with sharpened stakes, on a path of [x,z] points.
+  // Follows the terrain: pass heightAt (injected automatically by buildStructure).
   palisade(p = {}) {
     const g = new THREE.Group();
     const path = p.path || [];
+    const hAt = p.heightAt || (() => 0);
     const hMat = mat(0x6d5433);
-    const stake = new THREE.CylinderGeometry(0.35, 0.45, p.h || 4.5, 5);
-    const cone = new THREE.ConeGeometry(0.38, 0.9, 5);
+    const stake = new THREE.CylinderGeometry(0.4, 0.5, p.h || 4.5, 5);
+    const cone = new THREE.ConeGeometry(0.42, 0.9, 5);
     const count = [];
     for (let i = 0; i < path.length - 1; i++) {
       const [x1, z1] = path[i], [x2, z2] = path[i + 1];
       const len = Math.hypot(x2 - x1, z2 - z1);
-      const n = Math.max(1, Math.round(len / 0.8));
+      const n = Math.max(1, Math.round(len / 0.9));
       for (let j = 0; j < n; j++) count.push([x1 + (x2 - x1) * j / n, z1 + (z2 - z1) * j / n]);
     }
     const inst = new THREE.InstancedMesh(stake, hMat, count.length);
     const tip = new THREE.InstancedMesh(cone, hMat, count.length);
     const m4 = new THREE.Matrix4();
     count.forEach(([x, z], i) => {
-      m4.setPosition(x, (p.h || 4.5) / 2, z); inst.setMatrixAt(i, m4);
-      m4.setPosition(x, (p.h || 4.5) + 0.4, z); tip.setMatrixAt(i, m4);
+      const y = hAt(x, z);
+      m4.setPosition(x, y + (p.h || 4.5) / 2 - 0.4, z); inst.setMatrixAt(i, m4);
+      m4.setPosition(x, y + (p.h || 4.5) + 0.05, z); tip.setMatrixAt(i, m4);
     });
     inst.castShadow = tip.castShadow = true;
     g.add(inst, tip);
@@ -260,34 +263,44 @@ export const generators = {
   },
 
   // Earthen rampart topped with wooden wall — the defenses of medieval Rus.
+  // Follows the terrain via injected heightAt.
   rampart(p = {}) {
     const g = new THREE.Group();
     const path = p.path || [];
+    const hAt = p.heightAt || (() => 0);
     const earthH = p.earthH || 10, wallH = p.wallH || 5;
+    const earthMat = mat(0x7a7d52);
+    const logMat = facadeMat('logs', '#6d5433', '#48371f', [1, 1]);
     for (let i = 0; i < path.length - 1; i++) {
       const [x1, z1] = path[i], [x2, z2] = path[i + 1];
+      // split long spans into terrain-hugging chunks
       const len = Math.hypot(x2 - x1, z2 - z1);
-      const ang = Math.atan2(x2 - x1, z2 - z1);
-      const seg = new THREE.Group();
-      const earth = new THREE.Mesh(new THREE.CylinderGeometry(0.01, earthH * 0.9, earthH, 4, 1), mat(0x5d6b3c));
-      earth.scale.z = len / (earthH * 0.9) / 2 * 2.2;
-      earth.rotation.y = Math.PI / 4;
-      // simpler: use a box profile
-      seg.add(box(earthH * 1.6, earthH, len, mat(0x5d6b3c)));
-      seg.add(box(2.2, wallH, len, facadeMat('logs', '#6d5433', '#48371f', [1, 1]), 0, earthH));
-      seg.position.set((x1 + x2) / 2, 0, (z1 + z2) / 2);
-      seg.rotation.y = ang;
-      seg.children.forEach(c => { c.castShadow = c.receiveShadow = true; });
-      g.add(seg);
+      const chunks = Math.max(1, Math.round(len / 60));
+      for (let c = 0; c < chunks; c++) {
+        const t0 = c / chunks, t1 = (c + 1) / chunks;
+        const ax = x1 + (x2 - x1) * t0, az = z1 + (z2 - z1) * t0;
+        const bx = x1 + (x2 - x1) * t1, bz = z1 + (z2 - z1) * t1;
+        const clen = Math.hypot(bx - ax, bz - az) + 2;
+        const ang = Math.atan2(bx - ax, bz - az);
+        const y = Math.min(hAt(ax, az), hAt(bx, bz)) - 1.5;
+        const seg = new THREE.Group();
+        seg.add(box(earthH * 1.6, earthH, clen, earthMat));
+        if (wallH > 0.6) seg.add(box(2.2, wallH, clen, logMat, 0, earthH));
+        seg.position.set((ax + bx) / 2, y, (az + bz) / 2);
+        seg.rotation.y = ang;
+        seg.children.forEach(ch => { ch.castShadow = ch.receiveShadow = true; });
+        g.add(seg);
+      }
       // corner tower at each joint
       if (p.towers !== false) {
+        const ty = hAt(x1, z1) - 1.5;
         const t = new THREE.Group();
         t.add(cyl(3, 3.4, wallH + 4, facadeMat('logs', '#6d5433', '#48371f', [2, 2]), 0, earthH, 0, 8));
         const roof = new THREE.Mesh(new THREE.ConeGeometry(4, 4, 8), mat(0x4c3a24));
         roof.position.y = earthH + wallH + 6;
         roof.castShadow = true;
         t.add(roof);
-        t.position.set(x1, 0, z1);
+        t.position.set(x1, ty, z1);
         g.add(t);
       }
     }
@@ -605,9 +618,11 @@ export const generators = {
 export function buildStructure(entry, phase, terrainHeightAt) {
   const gen = generators[phase.build];
   if (!gen) { console.warn(`Unknown generator: ${phase.build}`); return new THREE.Group(); }
-  const g = gen(phase.params || {});
+  const pathBased = phase.build === 'palisade' || phase.build === 'rampart';
+  const params = pathBased ? { ...(phase.params || {}), heightAt: terrainHeightAt } : (phase.params || {});
+  const g = gen(params);
   const [x, z] = entry.pos;
-  const y = phase.y ?? (terrainHeightAt ? terrainHeightAt(x, z) : 0);
+  const y = pathBased ? 0 : (phase.y ?? (terrainHeightAt ? terrainHeightAt(x, z) : 0));
   g.position.set(x, y, z);
   if (entry.rotY) g.rotation.y = entry.rotY;
   if (phase.scale) g.scale.setScalar(phase.scale);

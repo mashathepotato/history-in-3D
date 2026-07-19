@@ -29,7 +29,7 @@ function heightAt(x, z) {
   const rc = riverX(z);
   const d = x - rc;
   const HW = 140;                        // river half-width
-  const noise = Math.sin(x * 0.021) * Math.cos(z * 0.017) * 1.6 + Math.sin(x * 0.043 + z * 0.031) * 0.9;
+  const noise = Math.sin(x * 0.0084 + z * 0.0031) * Math.cos(z * 0.0067 - x * 0.0022) * 1.5 + Math.sin(x * 0.019 + z * 0.023) * 0.45;
 
   let h;
   if (Math.abs(d) <= HW) {
@@ -98,7 +98,7 @@ export function buildConfig() {
       // -- Church of the Tithes (Desyatynna), 989–996; fell 1240 --
       { id: 'desyatynna', pos: [-120, -330], rotY: 0.2, phases: [
         { from: 996, to: 1240, build: 'church', params: { ...PLINFA, w: 26, d: 32, h: 15, apses: 3, galleries: true,
-          domeStyle: 'helmet', domeColor: '#8d95a3',
+          domeStyle: 'helmet', domeColor: '#a8b2c0',
           domes: [{ x: 0, z: -2, r: 4.4, drumH: 7 }, { x: -7, z: 6, r: 2.6, drumH: 5 }, { x: 7, z: 6, r: 2.6, drumH: 5 },
                   { x: -7, z: -10, r: 2.6, drumH: 5 }, { x: 7, z: -10, r: 2.6, drumH: 5 }] }, rise: 7, sinkDepth: 18 },
         { from: 1240, to: 1828, build: 'ruin', params: { seed: 12, n: 18, spread: 26, maxSize: 5, wallStub: [18, 6], color: '#b09a86' }, rise: 3 },
@@ -108,7 +108,7 @@ export function buildConfig() {
       { id: 'sofia', pos: [-280, -190], rotY: 0.15, phases: [
         // Byzantine original: five naves, 13 helmet domes, striped pink plinfa
         { from: 1037, to: 1700, rise: 26, build: 'church', params: { ...PLINFA, w: 30, d: 36, h: 18, apses: 5, galleries: true,
-          domeStyle: 'helmet', domeColor: '#8d95a3',
+          domeStyle: 'helmet', domeColor: '#a8b2c0',
           domes: [
             { x: 0, z: -2, r: 5.4, drumH: 9 },
             { x: -8, z: 6, r: 3, drumH: 6 }, { x: 8, z: 6, r: 3, drumH: 6 },
@@ -266,7 +266,7 @@ export function buildConfig() {
     districts: [
       // Starokyivska hilltop settlement
       { id: 'old-hill', area: [-120, -320, 120, 90], seed: 101, phases: [
-        { from: 490, to: 900, style: { gen: 'dugout', vary: { size: [2.6, 4] } }, count: 26, rise: 30 },
+        { from: 490, to: 900, style: { gen: 'dugout', vary: { size: [3.2, 4.8] } }, count: 38, rise: 30 },
         { from: 900, to: 1240, style: { gen: 'hut', vary: { w: [4, 6.5], d: [3.5, 5] } }, count: 42, rise: 40 },
         { from: 1600, to: 1830, style: { gen: 'hut', vary: { w: [4.5, 7], d: [4, 6] } }, count: 18, rise: 60 },
       ]},
@@ -375,7 +375,7 @@ export function buildConfig() {
         year: 482, major: true, title: 'The Legend of the Founders', kicker: 'Foundation · ~5th–6th century',
         caption: 'Three brothers and a sister stop on a hill above the Dnipro…',
         transitTitle: 'The first centuries…',
-        camera: { pos: [-420, 140, -640], look: [-90, 55, -320] },
+        camera: { pos: [-255, 105, -475], look: [-95, 60, -318] },
         env: { skyTop: '#7fa8d0', skyBottom: '#e8cfa0', sunDir: [0.75, 0.3, -0.45], sunColor: '#ffdca0', sunIntensity: 2.0, ambient: 0.85, fogColor: '#d8c8a8', fogDensity: 0.0009, haze: 0.55 },
         story: `<p>The chronicle tells of three brothers — <b>Kyi</b>, <b>Shchek</b> and <b>Khoryv</b> — and their sister <b>Lybid</b>, of the Slavic tribe of the Polianians, who settled these hills. The city took the eldest brother's name: <b>Kyiv</b>, "Kyi's place". Each sibling left a mark on the map that survives today — Shchekavytsia and Khorevytsia hills, and the little river Lybid.</p>
 <p>What you see is a fortified hilltop hamlet on <b>Starokyivska Hill</b>: semi-dugout houses with earthen roofs, a timber palisade, smoke rising from clay stoves. Below, the great river — the future highway of an empire.</p>`,

@@ -48,9 +48,15 @@ async function start() {
   ui.onNavigate = () => rig.reattach();      // era jumps fly you back to the vantage
   ui.onNavigateSoft = () => {};              // wheel scrub keeps your position
 
-  // start at the first stop's vantage
-  camera.position.set(...cfg.stops[0].camera.pos);
-  camera.lookAt(...cfg.stops[0].camera.look);
+  // deep-link: ?year=1037 starts the journey at that year
+  const startYear = parseFloat(params.get('year'));
+  let startStop = cfg.stops[0];
+  if (!Number.isNaN(startYear)) {
+    timeline.year = timeline.target = Math.max(timeline.minYear, Math.min(timeline.maxYear, startYear));
+    startStop = cfg.stops[timeline.nearestStopIndex(timeline.year)];
+  }
+  camera.position.set(...startStop.camera.pos);
+  camera.lookAt(...startStop.camera.look);
 
   let last = performance.now();
   let firstFrames = 0;
@@ -62,7 +68,10 @@ async function start() {
     rig.update(dt, cfg.stops, seg);
     ui.update();
     renderer.render(world.scene, camera);
-    if (++firstFrames === 3) loaderEl.classList.add('done');   // reveal once warm
+    if (++firstFrames === 3) {
+      loaderEl.classList.add('done');   // reveal once warm
+      setTimeout(() => loaderEl.remove(), 1500);
+    }
     requestAnimationFrame(loop);
   }
   requestAnimationFrame(loop);

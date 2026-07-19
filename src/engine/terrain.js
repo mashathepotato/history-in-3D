@@ -23,12 +23,12 @@ export function buildTerrain(cfg) {
     const h = heightAt(x, z);
     pos.setY(i, h);
     // color by height band with a little deterministic jitter
-    const jitter = (Math.sin(x * 12.9898 + z * 78.233) * 43758.5453 % 1) * 0.08;
+    const jitter = (Math.abs(Math.sin(x * 12.9898 + z * 78.233) * 43758.5453) % 1) * 0.05;
     if (h < waterY + 1.5) tmp.copy(cSand);
     else if (h < waterY + 6) tmp.lerpColors(cSand, cGrass, (h - waterY - 1.5) / 4.5);
     else if (h > 55) tmp.lerpColors(cGrass, cRock, Math.min(1, (h - 55) / 30));
     else tmp.lerpColors(cGrass, cDirt, jitter + 0.15);
-    tmp.offsetHSL(0, 0, jitter * 0.3 - 0.02);
+    tmp.offsetHSL(0, 0, jitter * 0.25 - 0.006);
     colors[i * 3] = tmp.r; colors[i * 3 + 1] = tmp.g; colors[i * 3 + 2] = tmp.b;
   }
   geo.setAttribute('color', new THREE.BufferAttribute(colors, 3));
@@ -46,7 +46,7 @@ export function buildTerrain(cfg) {
 export function buildWater(cfg) {
   const size = cfg.terrain.size;
   const waterY = cfg.terrain.waterLevel ?? 2;
-  const geo = new THREE.PlaneGeometry(size * 1.4, size * 1.4, 90, 90);
+  const geo = new THREE.PlaneGeometry(size * 0.995, size * 0.995, 90, 90);
   geo.rotateX(-Math.PI / 2);
   const uniforms = {
     uTime: { value: 0 },
