@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>History in 3D — Walk Through Kyiv</title>
+  <meta name="description" content="An interactive 3D journey through 1,500 years of Kyiv — from the legend of its founders to the present day." />
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏛️</text></svg>" />
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://cdn.jsdelivr.net/npm/three@0.161.0/build/three.module.js"
+      }
+    }
+  </script>
+</head>
+<body>
+  <div id="app">
+    <canvas id="scene"></canvas>
+
+    <!-- Loading screen -->
+    <div id="loader">
+      <div class="loader-inner">
+        <div class="loader-mark">✦</div>
+        <h1 id="loader-title">History in 3D</h1>
+        <p id="loader-sub">Building fifteen centuries…</p>
+        <div class="loader-bar"><div id="loader-fill"></div></div>
+      </div>
+    </div>
+
+    <!-- Top HUD: year + era title -->
+    <header id="hud">
+      <div id="year-display">
+        <span id="year-number">482</span>
+        <span id="year-suffix">AD</span>
+      </div>
+      <div id="era-title"></div>
+    </header>
+
+    <!-- Story / education panel -->
+    <aside id="story" class="hidden">
+      <button id="story-close" aria-label="Close story panel">×</button>
+      <div id="story-kicker"></div>
+      <h2 id="story-title"></h2>
+      <div id="story-body"></div>
+      <div id="story-context"></div>
+    </aside>
+
+    <!-- Timeline -->
+    <footer id="timeline">
+      <button id="btn-prev" class="nav-btn" aria-label="Previous era">‹</button>
+      <div id="track-wrap">
+        <div id="track">
+          <div id="track-fill"></div>
+          <div id="track-ticks"></div>
+          <div id="track-handle"></div>
+        </div>
+        <div id="track-labels"></div>
+      </div>
+      <button id="btn-next" class="nav-btn" aria-label="Next era">›</button>
+      <button id="btn-play" class="nav-btn" aria-label="Auto-play through history">▶</button>
+    </footer>
+
+    <!-- Controls help -->
+    <div id="help">
+      <span><b>Drag</b> look around</span>
+      <span><b>Scroll</b> travel time</span>
+      <span><b>W A S D</b> walk</span>
+      <span><b>← →</b> jump eras</span>
+      <span><b>Space</b> story</span>
+    </div>
+
+    <div id="transition-caption" class="hidden"></div>
+  </div>
+
+  <script type="module" src="src/main.js"></script>
+</body>
+</html>
