@@ -38,8 +38,8 @@ export class CameraRig {
       const dx = e.clientX - this._drag.x;
       const dy = e.clientY - this._drag.y;
       this._drag = { x: e.clientX, y: e.clientY };
-      this.yaw -= dx * 0.0032;
-      this.pitch -= dy * 0.0028;
+      this.yaw += dx * 0.0032;
+      this.pitch += dy * 0.0028;
       this.pitch = Math.max(-1.2, Math.min(1.25, this.pitch));
     });
     const endDrag = () => { this._drag = null; };
