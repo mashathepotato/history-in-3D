@@ -759,6 +759,74 @@ export const generators = {
     return g;
   },
 
+  // Industrial plant: production sheds, blast furnace, smokestacks.
+  factory(p = {}) {
+    const g = new THREE.Group();
+    const r = rng(p.seed || 19);
+    const brick = facadeMat('arches', p.wall || '#8a5a44', '#4a3028', [4, 1]);
+    const sheds = p.sheds || 3;
+    for (let i = 0; i < sheds; i++) {
+      const w = 26 + r() * 18, d = 14 + r() * 8, h = 9 + r() * 5;
+      const x = (i - (sheds - 1) / 2) * 34, z = (r() - 0.5) * 20;
+      g.add(box(w, h, d, brick, x, 0, z));
+      // sawtooth roof
+      for (let k = -1; k <= 1; k++) {
+        const roof = new THREE.Mesh(new THREE.CylinderGeometry(0.02, d * 0.36, 3.4, 3, 1), mat(0x5a5f66));
+        roof.rotation.z = Math.PI / 2;
+        roof.rotation.y = Math.PI / 2;
+        roof.scale.x = w / d / 1.1;
+        roof.position.set(x, h + 1.7, z + k * d * 0.33);
+        roof.castShadow = true;
+        g.add(roof);
+      }
+    }
+    // blast furnace: fat cone tower with gantry
+    if (p.furnace !== false) {
+      const fmat = mat(0x4f4a44, { metal: 0.5, rough: 0.6 });
+      g.add(cyl(4, 6.5, 24, fmat, sheds * 17 + 10, 0, 0, 10));
+      g.add(box(2, 30, 2, fmat, sheds * 17 + 16, 0, 4));
+      g.add(box(12, 1.2, 1.6, fmat, sheds * 17 + 10, 26, 2));
+    }
+    // smokestacks
+    const stacks = p.stacks ?? 3;
+    for (let i = 0; i < stacks; i++) {
+      const sx = -sheds * 17 - 8 - i * 14;
+      g.add(cyl(1.4, 2.4, p.stackH || 42, facadeMat('plinthite', '#7a4a38', '#4a2c22', [2, 6]), sx, 0, (r() - 0.5) * 14, 10));
+    }
+    return g;
+  },
+
+  // The Menorah Center: seven stone towers stepping up to the center.
+  menorah(p = {}) {
+    const g = new THREE.Group();
+    const heights = [22, 28, 34, 42, 34, 28, 22];
+    const f = (h) => facadeMat('windows', p.wall || '#d9cbb2', '#5a5248', [2, Math.max(1, h / 8)]);
+    heights.forEach((h, i) => {
+      g.add(box(13, h, 16, f(h), (i - 3) * 14.5, 0, 0));
+    });
+    g.add(box(heights.length * 14.5, 4, 18, f(12), 0, 0, 0));  // shared base
+    return g;
+  },
+
+  // A rocket on display (or a launch-pad silhouette).
+  rocket(p = {}) {
+    const g = new THREE.Group();
+    const body = mat(p.color || 0xdfe2e4, { flat: false, rough: 0.4, metal: 0.2 });
+    const h = p.h || 26;
+    g.add(box(6, 2, 6, mat(0x6a6f75), 0, 0, 0));                 // plinth
+    g.add(cyl(1.6, 1.6, h, body, 0, 2, 0, 14));
+    const nose = new THREE.Mesh(new THREE.ConeGeometry(1.6, 4.5, 14), mat(0xb03a2e, { flat: false }));
+    nose.position.y = 2 + h + 2.25;
+    nose.castShadow = true;
+    g.add(nose);
+    for (let i = 0; i < 4; i++) {
+      const fin = box(0.3, 5, 2.6, body, Math.cos(i * Math.PI / 2) * 1.8, 2, Math.sin(i * Math.PI / 2) * 1.8);
+      fin.rotation.y = -i * Math.PI / 2;
+      g.add(fin);
+    }
+    return g;
+  },
+
   // Rubble mound for destroyed structures.
   ruin(p = {}) {
     const g = new THREE.Group();

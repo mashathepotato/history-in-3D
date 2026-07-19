@@ -87,13 +87,14 @@ export class FireSystem {
     for (const s of this.systems) {
       const active = year >= s.site.from && year <= s.site.to ? 1 : 0;
       const target = active * (s.site.intensity ?? 1);
+      // smokeOnly sites (factory chimneys) never show flames
+      const fireTarget = s.site.smokeOnly ? 0 : target;
       s.fire.uniforms.uTime.value = t;
       s.smoke.uniforms.uTime.value = t * 0.5;
-      s.fire.uniforms.uIntensity.value += (target - s.fire.uniforms.uIntensity.value) * fade;
+      s.fire.uniforms.uIntensity.value += (fireTarget - s.fire.uniforms.uIntensity.value) * fade;
       s.smoke.uniforms.uIntensity.value += (target - s.smoke.uniforms.uIntensity.value) * fade;
-      const on = s.fire.uniforms.uIntensity.value > 0.02;
-      s.fire.pts.visible = on;
-      s.smoke.pts.visible = on;
+      s.fire.pts.visible = s.fire.uniforms.uIntensity.value > 0.02;
+      s.smoke.pts.visible = s.smoke.uniforms.uIntensity.value > 0.02;
     }
   }
 }

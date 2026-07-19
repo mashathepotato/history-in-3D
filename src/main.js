@@ -94,6 +94,17 @@ async function start() {
   setTimeout(() => { if (timeline.atStop() === 0) ui.showStory(0); }, 1800);
   // ?street=1 deep-links straight into street level
   if (params.has('street')) setTimeout(() => ui.onStreetToggle(params.has('snap')), 300);
+
+  // city switcher links under the controls help
+  const help = document.getElementById('help');
+  for (const id of Object.keys(cities)) {
+    if (id === cityId) continue;
+    const a = document.createElement('a');
+    a.href = `?city=${id}`;
+    a.textContent = `→ visit ${id[0].toUpperCase()}${id.slice(1)}`;
+    a.style.cssText = 'color:#e8c96a;pointer-events:auto;text-decoration:none;font-weight:600;';
+    help.appendChild(a);
+  }
 }
 
 start().catch((err) => {

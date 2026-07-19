@@ -1,11 +1,17 @@
-# History in 3D — Walk Through Kyiv
+# History in 3D — Walk Through Kyiv & Dnipro
 
-An interactive 3D journey through ~1,500 years of a city's history, rendered
-procedurally in the browser. The first city is **Kyiv**: from the legendary
-founding by Kyi, Shchek, Khoryv and Lybid, through the golden age of Kyivan
-Rus, the Mongol catastrophe, Cossack Baroque, the imperial boomtown, Soviet
-demolitions and war, to independence, the Maidan, and the city that held in
-2022.
+An interactive 3D journey through centuries of a city's history, rendered
+procedurally in the browser. Two cities so far:
+
+- **Kyiv** (default, or `?city=kyiv`): from the legendary founding by Kyi,
+  Shchek, Khoryv and Lybid, through the golden age of Kyivan Rus, the Mongol
+  catastrophe, Cossack Baroque, the imperial boomtown, Soviet demolitions and
+  war, to independence, the Maidan, and the city that held in 2022.
+- **Dnipro** (`?city=dnipro`): the river rapids and the island monastery of
+  legend, Kodak fortress and the Cossack Wild Fields, Potemkin's failed
+  imperial dream, the "Ukrainian Manchester" steel boom, the secret Soviet
+  rocket city closed to foreigners until 1987, and today's frontline
+  resilience hub.
 
 **No build step.** Open it and walk through history.
 
