@@ -22,25 +22,15 @@ procedurally in the browser. Two cities so far:
 
 ## One city, one scroll wheel, a thousand years
 
-**1037 — the Golden Age.** St. Sophia as it actually looked: unplastered
-pink-striped *plinfa* brick under lead-grey helmet domes, inside Yaroslav's
-timber-crowned ramparts. Every stop opens an educational panel — including
-the honest scholarly disputes.
+![Auto-playing through fifteen centuries of Kyiv — the story panel follows along era by era](docs/demo.gif)
 
-![Kyiv in 1037 — St. Sophia and the city of Yaroslav](docs/screenshots/kyiv-1037.png)
-
-**1707 — Cossack Baroque.** Scroll forward six centuries and the same
-building is re-dressed before your eyes: whitewashed walls, pear-shaped
-cupolas of gold, Mazepa's bell tower rising beside it.
-
-![Kyiv in 1707 — the baroque re-dressing of St. Sophia](docs/screenshots/kyiv-1707.png)
-
-**2026 — the living map.** By the present day the whole basin reads like a
-street map: procedural street networks in every district, boulevards with
-traffic, the paved city footprint grown out from the river — with every
-earlier era still one scroll away.
-
-![Kyiv in 2026 — the full street network and modern skyline](docs/screenshots/kyiv-2026.png)
+One auto-play run through the whole Kyiv timeline: the fortified hamlet of
+the founding legend, St. Sophia rising in unplastered pink-striped *plinfa*
+brick inside Yaroslav's ramparts, its Cossack Baroque re-dressing in white
+and gold, the imperial boomtown, the Soviet century — until the present-day
+basin reads like a street map, boulevards, traffic and all. Every era stop
+opens an educational panel (including the honest scholarly disputes), and
+it stays with you as you travel between stops.
 
 
 ## Run it
