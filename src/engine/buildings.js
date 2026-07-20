@@ -430,8 +430,10 @@ export const generators = {
   gate(p = {}) {
     const g = new THREE.Group();
     const wallMaterial = p.wallStyle === 'plinthite'
-      ? facadeMat('plinthite', '#c9b8a4', '#a45a48', [2, 2])
-      : facadeMat('logs', '#6d5433', '#48371f', [2, 2]);
+      ? facadeMat('plinthite', p.wall || '#c9b8a4', p.accent || '#a45a48', [2, 2])
+      : p.wallStyle === 'stone'
+        ? facadeMat('arches', p.wall || '#ddd6c4', p.accent || '#a89f8a', [3, 2])
+        : facadeMat('logs', '#6d5433', '#48371f', [2, 2]);
     const W = p.w || 16, H = p.h || 16, D = p.d || 12;
     // two piers + lintel = archway
     g.add(box(W * 0.32, H, D, wallMaterial, -W * 0.34));
@@ -823,6 +825,117 @@ export const generators = {
       const fin = box(0.3, 5, 2.6, body, Math.cos(i * Math.PI / 2) * 1.8, 2, Math.sin(i * Math.PI / 2) * 1.8);
       fin.rotation.y = -i * Math.PI / 2;
       g.add(fin);
+    }
+    return g;
+  },
+
+  // Medieval stone bridge crowded with houses (Old London Bridge).
+  housedBridge(p = {}) {
+    const g = new THREE.Group();
+    const len = p.len || 260, w = p.w || 12;
+    const stone = facadeMat('arches', '#b8ab92', '#7a6f5a', [8, 1]);
+    const deckY = p.deckY || 10;
+    g.add(box(len, 2.5, w, stone, 0, deckY));
+    const piers = Math.max(4, Math.round(len / 24));
+    for (let i = 0; i <= piers; i++) {
+      const x = -len / 2 + (len / piers) * i;
+      const pier = box(4.5, deckY, w * 0.85, stone, x, 0);
+      g.add(pier);
+      // starlings: pointed cutwaters
+      const cw = new THREE.Mesh(new THREE.ConeGeometry(3, w * 0.9, 4), mat(0x8f8570));
+      cw.rotation.x = Math.PI / 2;
+      cw.position.set(x, 2.5, 0);
+      g.add(cw);
+    }
+    // houses jettied out over both edges of the deck
+    if (p.houses !== false) {
+      const r = rng(p.seed || 27);
+      const houseMat = facadeMat('windows', '#c9b190', '#3a3a45', [1, 1]);
+      for (let x = -len / 2 + 14; x < len / 2 - 14; x += 11 + r() * 5) {
+        if (r() < 0.18) continue;   // gaps for carts to pass
+        for (const side of [1, -1]) {
+          const hw = 6 + r() * 3, hh = 6 + r() * 4;
+          const h = box(hw, hh, 4.6, houseMat, x, deckY + 2.5, side * (w / 2 - 1));
+          g.add(h);
+          const roof = new THREE.Mesh(new THREE.CylinderGeometry(0.02, 3.4, 3, 4, 1), mat(0x7a4a34));
+          roof.scale.x = hw / 4.8;
+          roof.rotation.y = Math.PI / 4;
+          roof.position.set(x, deckY + 2.5 + hh + 1.5, side * (w / 2 - 1));
+          roof.castShadow = true;
+          g.add(roof);
+        }
+      }
+      // chapel in the middle
+      const ch = box(8, 9, 7, facadeMat('arches', '#ddd6c4', '#a89f8a', [2, 1]), 0, deckY + 2.5);
+      g.add(ch);
+      const spire = new THREE.Mesh(new THREE.ConeGeometry(3, 7, 6), mat(0x6f6a5c));
+      spire.position.y = deckY + 2.5 + 9 + 3.5;
+      spire.castShadow = true;
+      g.add(spire);
+    }
+    return g;
+  },
+
+  // Bascule bridge with two gothic towers and high walkways (Tower Bridge).
+  towerBridge(p = {}) {
+    const g = new THREE.Group();
+    const len = p.len || 240, w = p.w || 14, deckY = p.deckY || 12;
+    const stone = facadeMat('arches', '#d4c9ae', '#9a8f78', [2, 3]);
+    const steel = mat(0x3f6079, { metal: 0.4, rough: 0.5 });
+    g.add(box(len, 2.2, w, steel, 0, deckY));
+    for (const side of [-1, 1]) {
+      const tx = side * len * 0.18;
+      const tower = new THREE.Group();
+      tower.add(box(16, 40, 16, stone));
+      for (const [cx, cz] of [[-7, -7], [7, -7], [-7, 7], [7, 7]]) {
+        tower.add(cyl(2.2, 2.2, 44, stone, cx, 0, cz, 8));
+        const cap = new THREE.Mesh(new THREE.ConeGeometry(2.8, 5, 8), mat(0x6f7f8a));
+        cap.position.set(cx, 46.5, cz);
+        cap.castShadow = true;
+        tower.add(cap);
+      }
+      tower.position.set(tx, 0, 0);
+      g.add(tower);
+      // suspension side-spans
+      g.add(box(len * 0.32, 1.4, w * 0.8, steel, side * len * 0.34, deckY + 6));
+    }
+    // high-level walkways between the towers
+    g.add(box(len * 0.36, 2, 5, steel, 0, 34, 0));
+    return g;
+  },
+
+  // Observation wheel on the river bank (the London Eye).
+  ferrisWheel(p = {}) {
+    const g = new THREE.Group();
+    const R = p.r || 55;
+    const steel = mat(0xdfe3e6, { metal: 0.6, rough: 0.35, flat: false });
+    const rim = new THREE.Mesh(new THREE.TorusGeometry(R, 1.2, 8, 48), steel);
+    rim.position.y = R + 6;
+    rim.castShadow = true;
+    g.add(rim);
+    for (let i = 0; i < 8; i++) {
+      const spoke = new THREE.Mesh(new THREE.BoxGeometry(0.7, R * 2, 0.7), steel);
+      spoke.position.y = R + 6;
+      spoke.rotation.z = (i / 8) * Math.PI;
+      g.add(spoke);
+    }
+    // capsules
+    const podGeo = new THREE.SphereGeometry(2.2, 8, 6);
+    const podMat = mat(0x9fb8c8, { flat: false, rough: 0.3 });
+    for (let i = 0; i < 12; i++) {
+      const a = (i / 12) * Math.PI * 2;
+      const pod = new THREE.Mesh(podGeo, podMat);
+      pod.position.set(Math.cos(a) * R, R + 6 + Math.sin(a) * R, 0);
+      pod.castShadow = true;
+      g.add(pod);
+    }
+    // A-frame support
+    for (const side of [-1, 1]) {
+      const leg = new THREE.Mesh(new THREE.CylinderGeometry(1.2, 1.6, R * 1.35, 8), steel);
+      leg.position.set(0, (R + 6) / 2, side * 8);
+      leg.rotation.x = side * 0.32;
+      leg.castShadow = true;
+      g.add(leg);
     }
     return g;
   },

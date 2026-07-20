@@ -1,4 +1,4 @@
-# History in 3D — Walk Through Kyiv & Dnipro
+# History in 3D — Walk Through Kyiv, Dnipro & London
 
 An interactive 3D journey through centuries of a city's history, rendered
 procedurally in the browser. Two cities so far:
@@ -12,6 +12,11 @@ procedurally in the browser. Two cities so far:
   imperial dream, the "Ukrainian Manchester" steel boom, the secret Soviet
   rocket city closed to foreigners until 1987, and today's frontline
   resilience hub.
+- **London** (`?city=london`): Roman Londinium and Boudica's fire, Alfred
+  reclaiming the walls, the medieval bridge with houses on it, Shakespeare's
+  Bankside, the Great Fire and Wren's dome, the world's first Underground,
+  Tower Bridge, the Blitz, and the glass skyline from Canary Wharf to the
+  Shard.
 
 **No build step.** Open it and walk through history.
 

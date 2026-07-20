@@ -4,4 +4,5 @@
 export const cities = {
   kyiv: async () => (await import('./kyiv.js')).buildConfig(),
   dnipro: async () => (await import('./dnipro.js')).buildConfig(),
+  london: async () => (await import('./london.js')).buildConfig(),
 };

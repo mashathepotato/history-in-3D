@@ -210,7 +210,7 @@ export class Traffic {
       const curve = new THREE.CatmullRomCurve3(pts);
       const r = rng(d.seed || 17);
       for (let i = 0; i < (d.count || 1); i++) {
-        const v = this._vehicle(d.type, r);
+        const v = this._vehicle(d.type, r, d.color);
         this.group.add(v);
         this.items.push({ d, curve, v, u0: (i + r() * 0.5) / (d.count || 1) });
       }
@@ -218,7 +218,7 @@ export class Traffic {
     this.heightAt = heightAt;
   }
 
-  _vehicle(type, r) {
+  _vehicle(type, r, color) {
     const g = new THREE.Group();
     if (type === 'cart') {
       const wood = mat(0x6b4f2e);
@@ -249,7 +249,7 @@ export class Traffic {
         g.add(leg);
       }
     } else if (type === 'tram') {
-      const body = new THREE.Mesh(new THREE.BoxGeometry(2.3, 2.6, 8.5), mat(0xc8901f, { flat: false }));
+      const body = new THREE.Mesh(new THREE.BoxGeometry(2.3, 2.6, 8.5), mat(color ?? 0xc8901f, { flat: false }));
       body.position.y = 1.9; body.castShadow = true;
       g.add(body);
       const roof = new THREE.Mesh(new THREE.BoxGeometry(2.4, 0.3, 8.7), mat(0x7a2f22));
@@ -265,12 +265,22 @@ export class Traffic {
       panto.position.y = 4.2; panto.rotation.z = 0.3;
       g.add(panto);
     } else if (type === 'bus') {
-      const body = new THREE.Mesh(new THREE.BoxGeometry(2.4, 2.6, 9), mat(0x3f6d5a, { flat: false }));
+      const body = new THREE.Mesh(new THREE.BoxGeometry(2.4, 2.6, 9), mat(color ?? 0x3f6d5a, { flat: false }));
       body.position.y = 1.8; body.castShadow = true;
       g.add(body);
       const win = new THREE.Mesh(new THREE.BoxGeometry(2.5, 0.9, 7.6), mat(0x2c3a48, { flat: false, rough: 0.3 }));
       win.position.y = 2.5;
       g.add(win);
+    } else if (type === 'doubledecker') {
+      const body = new THREE.Mesh(new THREE.BoxGeometry(2.4, 4.2, 8.5), mat(color ?? 0xb2221f, { flat: false }));
+      body.position.y = 2.5; body.castShadow = true;
+      g.add(body);
+      const winMat = mat(0x2c3a48, { flat: false, rough: 0.3 });
+      for (const y of [2.2, 4.1]) {
+        const win = new THREE.Mesh(new THREE.BoxGeometry(2.5, 0.8, 7.4), winMat);
+        win.position.y = y;
+        g.add(win);
+      }
     } else { // car
       const colors = [0xa8352a, 0x36486a, 0xd8d4c8, 0x3a3d40, 0x7c8288, 0x8a7332];
       const paint = mat(colors[Math.floor(r() * colors.length)], { flat: false, rough: 0.4, metal: 0.3 });
