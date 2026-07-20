@@ -92,6 +92,23 @@ body { font-family: var(--sans); color: var(--text); }
   border-radius: 0 6px 6px 0;
 }
 #story-context b { color: var(--gold-soft); }
+#story-toggle {
+  position: absolute; top: 24px; right: 24px; z-index: 19;
+  background: var(--panel);
+  border: 1px solid var(--panel-border);
+  color: var(--gold-soft);
+  border-radius: 8px;
+  padding: 9px 16px;
+  font: 600 13px var(--sans);
+  letter-spacing: 0.06em;
+  cursor: pointer;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  box-shadow: 0 6px 24px rgba(0,0,0,0.45);
+  transition: opacity 0.45s ease, transform 0.45s ease;
+}
+#story-toggle:hover { color: var(--text); border-color: var(--gold); }
+#story-toggle.hidden { opacity: 0; transform: translateX(24px); pointer-events: none; }
 #story::-webkit-scrollbar { width: 6px; }
 #story::-webkit-scrollbar-thumb { background: rgba(212,175,55,0.3); border-radius: 3px; }
 
@@ -181,6 +198,7 @@ body { font-family: var(--sans); color: var(--text); }
   #era-title { font-size: 16px; max-width: 240px; }
   #help { display: none; }
   #story { top: auto; bottom: 100px; max-height: 46vh; }
+  #story-toggle { top: auto; bottom: 100px; }
   #timeline { padding: 10px 12px 20px; bottom: 12px; }
   #track-labels { display: none; }
 }

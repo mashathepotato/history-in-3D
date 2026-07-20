@@ -19,6 +19,7 @@ export class UI {
       labels: document.getElementById('track-labels'),
       caption: document.getElementById('transition-caption'),
       btnPlay: document.getElementById('btn-play'),
+      storyToggle: document.getElementById('story-toggle'),
     };
     this._shownStop = -1;
     this._storyDismissed = false;
@@ -58,9 +59,10 @@ export class UI {
       this.el.btnPlay.textContent = this.t.playing ? '❚❚' : '▶';
       if (this.onNavigate) this.onNavigate();
     });
-    document.getElementById('story-close').addEventListener('click', () => {
-      this._storyDismissed = true;
-      this.el.story.classList.add('hidden');
+    document.getElementById('story-close').addEventListener('click', () => this.hideStory());
+    this.el.storyToggle.addEventListener('click', () => {
+      this._storyDismissed = false;
+      this.showStory(Math.max(0, this._shownStop));
     });
     // track scrubbing
     const scrub = (e) => {
@@ -78,11 +80,10 @@ export class UI {
       else if (e.code === 'ArrowLeft') this.nav(-1);
       else if (e.code === 'Space') {
         e.preventDefault();
-        const i = this.t.atStop();
-        if (i >= 0) {
-          this._storyDismissed = !this.el.story.classList.contains('hidden');
-          this.el.story.classList.toggle('hidden');
-        }
+        if (this.el.story.classList.contains('hidden')) {
+          this._storyDismissed = false;
+          this.showStory(Math.max(0, this._shownStop));
+        } else this.hideStory();
       }
     });
     // wheel = time travel
@@ -104,7 +105,10 @@ export class UI {
 
   goTo(i) {
     this.t.goToStop(i);
-    this._storyDismissed = false;
+    if (this._storyDismissed) {
+      this._storyDismissed = false;
+      this.showStory(Math.max(0, this._shownStop));
+    }
     if (this.onNavigate) this.onNavigate();
     const s = this.t.stops[Math.max(0, Math.min(this.t.stops.length - 1, i))];
     if (s.caption) this.showCaption(s.caption);
@@ -119,7 +123,11 @@ export class UI {
 
   showStory(i) {
     const s = this.t.stops[i];
-    if (!s.story) return;
+    if (!s || !s.story) {
+      this.el.story.classList.add('hidden');
+      this.el.storyToggle.classList.add('hidden');
+      return;
+    }
     this.el.storyKicker.textContent = s.kicker || '';
     this.el.storyTitle.textContent = s.title;
     this.el.storyBody.innerHTML = s.story;
@@ -128,7 +136,15 @@ export class UI {
       this.el.storyContext.style.display = '';
     } else this.el.storyContext.style.display = 'none';
     this.el.story.classList.remove('hidden');
+    this.el.storyToggle.classList.add('hidden');
     this.el.story.scrollTop = 0;
+  }
+
+  hideStory() {
+    this._storyDismissed = true;
+    this.el.story.classList.add('hidden');
+    const s = this.t.stops[this._shownStop];
+    if (s && s.story) this.el.storyToggle.classList.remove('hidden');
   }
 
   update() {
@@ -143,23 +159,20 @@ export class UI {
       el.classList.toggle('passed', t.yearToU(t.stops[i].year) <= u + 0.001);
     });
 
-    // era title + story panel visibility
+    // era title
     const stopIdx = t.atStop();
-    if (stopIdx >= 0) {
-      const s = t.stops[stopIdx];
-      this.el.era.textContent = `${s.title}`;
-      if (this._shownStop !== stopIdx && !this._storyDismissed) {
-        this._shownStop = stopIdx;
-        this.showStory(stopIdx);
-      }
-    } else {
-      const seg = t.segment();
-      this.el.era.textContent = t.stops[seg.i].transitTitle || '';
-      if (this._shownStop !== -1) {
-        this._shownStop = -1;
-        this.el.story.classList.add('hidden');
-        this._storyDismissed = false;
-      }
+    const seg = t.segment();
+    this.el.era.textContent = stopIdx >= 0
+      ? `${t.stops[stopIdx].title}`
+      : (t.stops[seg.i].transitTitle || '');
+
+    // story panel: shows the era we're in (last stop passed) and stays up
+    // while travelling; content swaps only when we cross into the next era.
+    const storyIdx = stopIdx >= 0 ? stopIdx : seg.i;
+    if (this._shownStop !== storyIdx) {
+      this._shownStop = storyIdx;
+      this._storyDismissed = false;
+      this.showStory(storyIdx);
     }
   }
 }
