@@ -20,6 +20,29 @@ procedurally in the browser. Two cities so far:
 
 **No build step.** Open it and walk through history.
 
+## One city, one scroll wheel, a thousand years
+
+**1037 — the Golden Age.** St. Sophia as it actually looked: unplastered
+pink-striped *plinfa* brick under lead-grey helmet domes, inside Yaroslav's
+timber-crowned ramparts. Every stop opens an educational panel — including
+the honest scholarly disputes.
+
+![Kyiv in 1037 — St. Sophia and the city of Yaroslav](docs/screenshots/kyiv-1037.png)
+
+**1707 — Cossack Baroque.** Scroll forward six centuries and the same
+building is re-dressed before your eyes: whitewashed walls, pear-shaped
+cupolas of gold, Mazepa's bell tower rising beside it.
+
+![Kyiv in 1707 — the baroque re-dressing of St. Sophia](docs/screenshots/kyiv-1707.png)
+
+**2026 — the living map.** By the present day the whole basin reads like a
+street map: procedural street networks in every district, boulevards with
+traffic, the paved city footprint grown out from the river — with every
+earlier era still one scroll away.
+
+![Kyiv in 2026 — the full street network and modern skyline](docs/screenshots/kyiv-2026.png)
+
+
 ## Run it
 
 ```bash
@@ -38,7 +61,6 @@ Or deploy the repo as-is to GitHub Pages.
 | **Scroll** | Travel through time (buildings rise and fall around you) |
 | **W A S D** (+ Q/E, Shift) | Walk/fly freely through the scene |
 | **← →** | Jump between era stops |
-| **V** or ⬇ | **Street level**: drop to a curated eye-level spot in the current era, press again to fly back up |
 | **Space** | Toggle the story panel |
 | **▶** | Auto-play the whole timeline |
 
@@ -75,8 +97,7 @@ St. Sophia in 1030 and scrolling forward.
   storefronts, and era-gated traffic — horse carts, the 1892 electric tram
   (the empire's first), then cars and buses following the actual streets.
   District buildings and trees respect the road network instead of spawning
-  on it. Deep links: `?year=1964&street=1` drops you straight onto the
-  Khreshchatyk asphalt.
+  on it. Deep links: `?year=1964` opens straight into an era.
 - **The ground itself urbanizes**: meadows turn to dusty medieval town and
   then to pavement as each district's urbanization year passes; dirt tracks
   become cobbled streets and squares, then asphalt boulevards, bridge
@@ -90,25 +111,24 @@ Church of the Tithes) the story panels say so honestly.
 
 ## Add your own city
 
-The engine is city-agnostic; Kyiv is one data file. To add a city:
+The engine is city-agnostic; each city is one data file, and the tooling
+holds every city to the same quality bar:
 
-1. Create `src/cities/yourcity.js` exporting `buildConfig()` that returns:
-   - `terrain`: a `heightAt(x, z)` function plus palette — this is your
-     geography (hills, river bed below `waterLevel`, plains);
-   - `structures`: landmarks, each with `pos` and a list of `phases`
-     (`{from, to, build, params}`) — `build` names a generator from
-     `src/engine/buildings.js` (churches, gates, ramparts, towers, bridges,
-     ruins…); a structure changes style, is destroyed, or is rebuilt simply by
-     giving it multiple phases;
-   - `districts`: areas of generic era-dependent building fabric;
-   - `effects`: fires, boats, crowds, groves — all year-gated;
-   - `stops`: the era keyframes — year, camera vantage, sky/lighting mood,
-     title, caption, and the educational story HTML.
-2. Register it in `src/cities/index.js`.
-3. Open `?city=yourcity`.
+1. **Copy the template**: `cp src/cities/_template.js src/cities/yourcity.js`
+   — a small working city (preview at `?city=template`) with every feature
+   demonstrated and commented.
+2. **Read [CITY_GUIDE.md](CITY_GUIDE.md)** — the full recipe that produced
+   Kyiv, Dnipro and London: research first, geography as a height function,
+   landmarks as life-story phases, districts + street grids, life systems,
+   and 14–18 educational era stops.
+3. **Register it** in `src/cities/index.js` and open `?city=yourcity`.
+4. **Pass the validator**: `node scripts/check-city.mjs yourcity` (it also
+   runs in the browser console on every load). Errors mean broken;
+   warnings are the gap to the reference-city bar. Ship at zero of both.
 
-New building types (a pagoda, a minaret, an aqueduct…) are added as generator
-functions in `buildings.js` and immediately usable from any city config.
+New building types (a pagoda, a minaret, an aqueduct…) are added as
+generator functions in `src/engine/buildings.js` and immediately usable
+from any city config.
 
 ## Tech
 

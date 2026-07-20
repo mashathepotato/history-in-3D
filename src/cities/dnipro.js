@@ -345,7 +345,6 @@ export function buildConfig() {
         caption: 'Below this bend, the river breaks into nine walls of stone.',
         transitTitle: 'The steppe and the river…',
         camera: { pos: [850, 120, -450], look: [600, 15, -150] },
-        street: { pos: eye(590, -120, 2.5), look: eye(620, -180, 6) },
         env: { skyTop: '#7fa8d0', skyBottom: '#e8d0a0', sunDir: [0.7, 0.35, -0.4], sunColor: '#ffdca0', sunIntensity: 2.1, ambient: 0.85, fogColor: '#d8c8a4', fogDensity: 0.0008, haze: 0.5 },
         story: `<p>Long before any city, this bend of the Dnipro was the most dangerous mile of the great trade road <b>"from the Varangians to the Greeks"</b>. Just downstream — look south — the river once broke over the <b>porohy</b>, nine granite rapids that forced every boat ashore, to be dragged past the white water while the steppe watched.</p>
 <p>On the wooded island below you, tradition places a <b>Byzantine monastery of the 9th century</b>, where travellers prayed before daring the rapids — destroyed, the story goes, by the Mongols in 1240. The island has been called <b>Monastyrskyi</b> ever since.</p>`,
@@ -356,7 +355,6 @@ export function buildConfig() {
         caption: 'A star fort rises to lock the Cossacks out of their own river.',
         transitTitle: 'The Wild Fields…',
         camera: { pos: [180, 130, 850], look: [-140, 55, 1050] },
-        street: { pos: eye(-100, 970, 2.4), look: eye(-145, 1050, 10) },
         env: { skyTop: '#7aa8c8', skyBottom: '#ddd0ac', sunDir: [0.5, 0.5, -0.4], sunColor: '#f8ecc8', sunIntensity: 2.1, ambient: 0.9, fogColor: '#ccc8b0', fogDensity: 0.0008, haze: 0.5 },
         story: `<p>These steppes were the <b>Wild Fields</b> — the Zaporozhian Cossacks' world, beyond any king's writ. In July 1635 the Polish-Lithuanian Commonwealth built <b>Kodak Fortress</b> on the bluff above the first rapid, to cut the Cossack lowlands off from the Sich downstream and stop runaway serfs from joining them.</p>
 <p>It stood <b>one month</b>. In August 1635 Hetman <b>Ivan Sulyma</b> stormed it by night and razed it. Rebuilt bigger in 1639, it watched the river until 1711, when treaty obliged its demolition. Cossack settlements — Novyi Kodak, Polovytsia — grew along the bank below; their farmsteads are the true ancestors of the city.</p>`,
@@ -367,7 +365,6 @@ export function buildConfig() {
         caption: 'Two emperors lay two stones for a cathedral that will never rise.',
         transitTitle: 'An empire draws a city on the steppe…',
         camera: { pos: [-560, 110, 380], look: [-330, 55, 170] },
-        street: { pos: eye(-360, 130, 2.4), look: eye(-330, 180, 6) },
         env: { skyTop: '#6fa5d8', skyBottom: '#ecd8ac', sunDir: [0.5, 0.55, -0.35], sunColor: '#fff0c8', sunIntensity: 2.3, ambient: 0.95, fogColor: '#d8d0b8', fogDensity: 0.0007, haze: 0.4 },
         story: `<p>In 1776, on conquered Cossack land, the empire founded <b>Yekaterinoslav</b> — "Catherine's Glory". Prince <b>Potemkin</b> dreamed it as a third imperial capital: a university, a conservatory, botanical gardens, and a cathedral modelled on Rome's basilica of <b>St. Paul Outside the Walls</b> — which legend soon inflated into "one arshin longer than St. Peter's".</p>
 <p>In May 1787 <b>Catherine II</b> sailed down the Dnipro with Emperor <b>Joseph II</b> of Austria to found it. The two monarchs laid the first stones of the great cathedral — prompting Joseph's reported quip: <i>"I laid the second stone, and the Empress the first — and the last."</i> He was nearly right: money and Potemkin died, and only the vast foundation outline remained — you can see it below, a rectangle of stone in the grass.</p>`,
@@ -378,7 +375,6 @@ export function buildConfig() {
         caption: 'Inside a giant’s foundation, a modest cathedral.',
         transitTitle: 'The dream shrinks to fit…',
         camera: { pos: [-520, 90, 320], look: [-340, 45, 160] },
-        street: { pos: eye(-300, 155, 2.4), look: eye(-330, 180, 8) },
         env: { skyTop: '#84aed4', skyBottom: '#e4d8b8', sunDir: [0.5, 0.55, -0.35], sunColor: '#fff2cc', sunIntensity: 2.2, ambient: 0.95, fogColor: '#d4d4c0', fogDensity: 0.0007, haze: 0.4 },
         story: `<p>Fifty years on, "Catherine's Glory" is a sleepy governorate town of some ten thousand souls. In 1830–1835 the <b>Transfiguration Cathedral</b> was finally built — a graceful classical church that would fit inside the altar of Potemkin's fantasy. It stands <b>inside the original foundation perimeter</b>, which peeks from the lawn around it like the outline of a ghost.</p>
 <p>The <b>Potemkin Palace</b> on the hill above the river — the prince's own residence of the 1780s, the city's oldest building — hosts the nobility's assemblies. The great <b>prospekt</b> Potemkin drew across the hill is a dusty, tree-lined promise.</p>`,
@@ -389,7 +385,6 @@ export function buildConfig() {
         caption: 'A mile of iron connects two buried treasures.',
         transitTitle: 'Rails race across the steppe…',
         camera: { pos: [300, 110, -600], look: [575, 20, -260] },
-        street: { pos: eye(390, -310, 2.6), look: [575, 22, -260] },
         env: { skyTop: '#7fa8cc', skyBottom: '#e0d0b0', sunDir: [0.45, 0.5, -0.4], sunColor: '#ffeec4', sunIntensity: 2.2, ambient: 0.9, fogColor: '#ccc8b8', fogDensity: 0.00075, haze: 0.5 },
         story: `<p>West of the city lay the iron mountain of <b>Kryvyi Rih</b>; east, the coal of the <b>Donbas</b>. In 1884 the <b>Catherine Railway</b> joined them — and its centrepiece was this <b>kilometre-and-a-half, two-tier iron bridge</b> across the Dnipro — rails below, road above, the third-longest bridge in Europe when it opened — carrying trains high over the water on a march of arches.</p>
 <p>The geometry was destiny: ore and coal had to meet somewhere, and they met here. Within three years the first great metallurgical works would light its furnaces on the riverbank you see smoking to the north.</p>`,
@@ -400,7 +395,6 @@ export function buildConfig() {
         caption: 'Furnaces by the river, mansions on the hill.',
         transitTitle: 'Smoke and money…',
         camera: { pos: [-350, 130, -180], look: [0, 40, 90] },
-        street: { pos: eye(-150, 105, 2.4), look: eye(-40, 145, 5) },
         env: { skyTop: '#8aa4b8', skyBottom: '#d8c8a4', sunDir: [0.4, 0.45, -0.4], sunColor: '#f4e0b0', sunIntensity: 2.0, ambient: 0.85, fogColor: '#bcb4a0', fogDensity: 0.001, haze: 0.6 },
         story: `<p>In one generation the sleepy town exploded into <b>the Ukrainian Manchester</b>: the Alexandrovsk (Bryansk) works and its sisters poured steel day and night; population leapt from twenty thousand to well past a hundred; in <b>1897</b> an <b>electric tram</b> — the third in the empire, after Kyiv and Nizhny Novgorod — began climbing the prospekt, now a canyon of banks and mansions.</p>
 <p>A third of the city was <b>Jewish</b> — merchants, doctors, factory hands — one of the great Jewish cities of Europe. Prosperity had a dark twin: the pogrom of October 1905 killed scores here. Workers' slobodas of mud and timber pressed against the factory fences below the smoke.</p>`,
@@ -411,7 +405,6 @@ export function buildConfig() {
         caption: 'The city takes a Bolshevik’s name and doubles its steel.',
         transitTitle: 'Five-year plans…',
         camera: { pos: [500, 140, -700], look: [300, 30, -350] },
-        street: { pos: eye(300, -380, 2.4), look: eye(150, -470, 12) },
         env: { skyTop: '#7a94a8', skyBottom: '#c8bca0', sunDir: [0.4, 0.5, -0.3], sunColor: '#e8dcc0', sunIntensity: 1.9, ambient: 0.8, fogColor: '#b0aa98', fogDensity: 0.0011, haze: 0.6 },
         story: `<p>In 1926 the Soviets renamed the city <b>Dnipropetrovsk</b>, after the Bolshevik <b>Grigory Petrovsky</b> — nominal head of Soviet Ukraine. Under the first five-year plans its plants swelled; a new industrial city grew on the flat <b>left bank</b>, joined to the old hill by bridge and barge.</p>
 <p>The same years broke the countryside around it: the <b>Holodomor</b> famine of 1932–33, engineered by grain seizures, killed millions of peasants in these black-earth provinces while the city's canteens fed steelworkers by ration card.</p>`,
@@ -422,7 +415,6 @@ export function buildConfig() {
         caption: 'Two years of occupation. The ravines keep the count.',
         transitTitle: 'The front crosses the river…',
         camera: { pos: [-450, 140, -100], look: [-150, 40, 160] },
-        street: { pos: eye(-200, 120, 2.4), look: eye(-120, 160, 4) },
         env: { skyTop: '#5a5f68', skyBottom: '#8a8478', sunDir: [0.3, 0.3, -0.5], sunColor: '#c0b8a0', sunIntensity: 1.3, ambient: 0.5, fogColor: '#8a887c', fogDensity: 0.0016, haze: 0.8 },
         story: `<p>German forces took Dnipropetrovsk in <b>August 1941</b>; the retreating Soviets blew the great bridge behind them. In <b>October 1941</b> the occupiers marched more than <b>ten thousand of the city's Jews</b> to an anti-tank ditch near the botanical garden and shot them over two days — one of the largest single massacres in Ukraine after Babyn Yar. The community that had been a third of the city was annihilated.</p>
 <p>Liberation came on <b>25 October 1943</b>, across a burning river into a city of ruins. The bridge rose again within a year; whole districts took a decade.</p>`,
@@ -433,7 +425,6 @@ export function buildConfig() {
         caption: 'The tractor factory that aimed at the Moon — and at Washington.',
         transitTitle: 'A secret takes over the city…',
         camera: { pos: [-150, 160, 800], look: [-480, 40, 1100] },
-        street: { pos: eye(-420, 1010, 2.4), look: eye(-460, 1055, 14) },
         env: { skyTop: '#6fa5d4', skyBottom: '#dcd4b4', sunDir: [0.5, 0.6, -0.35], sunColor: '#fff2cc', sunIntensity: 2.4, ambient: 1.0, fogColor: '#ccd0c0', fogDensity: 0.0007, haze: 0.35 },
         story: `<p>South of the old city, a postwar "automobile plant" quietly changed products. By the mid-1950s <b>Yuzhmash</b> (the Southern Machine-Building Plant) and <b>Mikhail Yangel's</b> design bureau <b>KB Yuzhnoye</b> were building the Soviet Union's ballistic missiles — the R-12, the R-16, and eventually the heaviest ICBM ever fielded, known to NATO as the <b>SS-18 Satan</b>, alongside space launchers like Zenit and Tsyklon.</p>
 <p>The price of the secret: <b>Dnipropetrovsk was closed to foreigners</b> from 1959 until 1987. A city of a million lived publicly invisible — no foreign tourists, no sister cities, its own name absent from certain maps' explanations.</p>`,
@@ -444,7 +435,6 @@ export function buildConfig() {
         caption: 'Panel housing to the horizon on both banks.',
         transitTitle: 'The city crosses a million…',
         camera: { pos: [420, 160, 700], look: [-50, 40, 500] },
-        street: { pos: eye(-40, 720, 2.4), look: eye(-110, 790, 8) },
         env: { skyTop: '#6fa5d4', skyBottom: '#e0d8bc', sunDir: [0.5, 0.6, -0.35], sunColor: '#fff2cc', sunIntensity: 2.4, ambient: 1.0, fogColor: '#ccd4c8', fogDensity: 0.00065, haze: 0.35 },
         story: `<p>In the 1970s Dnipropetrovsk passed <b>one million inhabitants</b> — a metropolis of steel, rockets and prefab concrete. Panel districts marched down both banks: <b>Pobeda</b> ("Victory") spread along the right-bank riverfront below you, its sixteen-storey slabs facing the water across the new <b>embankment</b> — locals will tell you it's the longest in Europe.</p>
 <p>With Brezhnev in the Kremlin the city's men held the ministries; the joke ran that history has three eras — <i>pre-Petrine, Petrine, and Dnipropetrine</i>. A metro was decreed; digging began in 1981 and would outlast the state that ordered it.</p>`,
@@ -455,7 +445,6 @@ export function buildConfig() {
         caption: 'The rockets get civilian passports.',
         transitTitle: 'Flags change over the plants…',
         camera: { pos: [-500, 120, 300], look: [-240, 45, 180] },
-        street: { pos: eye(-280, 120, 2.4), look: eye(-330, 175, 10) },
         env: { skyTop: '#5f9fd8', skyBottom: '#ecdfc0', sunDir: [0.5, 0.55, -0.4], sunColor: '#fff6d8', sunIntensity: 2.4, ambient: 1.0, fogColor: '#d8dcd0', fogDensity: 0.00065, haze: 0.35 },
         story: `<p>Independent Ukraine inherited the rocket city and gave up the warheads: Yuzhmash's missiles left the country under disarmament treaties, while its <b>Zenit</b> rockets found civilian work launching satellites from a floating pad on the Pacific. The plant's director, <b>Leonid Kuchma</b>, became prime minister, then <b>president</b> in 1994.</p>
 <p>On <b>29 December 1995</b> the city finally opened its <b>metro</b> — six stations, thirteen years in the digging, a Soviet promise delivered into a different country. The 1990s otherwise ran on survival: idle furnaces, barter salaries, and the first private fortunes rising out of the metal trade.</p>`,
@@ -466,7 +455,6 @@ export function buildConfig() {
         caption: 'The rear becomes the front’s strong shoulder.',
         transitTitle: 'War comes east…',
         camera: { pos: [-460, 110, 420], look: [-240, 50, 230] },
-        street: { pos: eye(-190, 200, 2.4), look: eye(-240, 235, 12) },
         env: { skyTop: '#70808f', skyBottom: '#b0a894', sunDir: [0.35, 0.4, -0.4], sunColor: '#e0d4b8', sunIntensity: 1.7, ambient: 0.75, fogColor: '#a8a89c', fogDensity: 0.001, haze: 0.55 },
         story: `<p>In 2012 the city's Jewish community — reborn from the ashes of 1941 — opened the <b>Menorah Center</b> beside the Golden Rose synagogue: seven stone towers in the shape of the seven-branched lamp, called the largest Jewish community complex in the world. Two years later, when war began in the Donbas, Dnipropetrovsk chose its side without hesitation.</p>
 <p>The city became the front's <b>outpost</b>: volunteer battalions mustered here, warehouses filled with donated armour and food, and <b>Mechnikov Hospital</b> became the place that gave wounded soldiers back their lives, hundreds upon hundreds of them. In 2016 the city dropped the Bolshevik from its name: simply <b>Dnipro</b>, like the river.</p>`,
@@ -477,7 +465,6 @@ export function buildConfig() {
         caption: 'The sirens know the address; the city stays.',
         transitTitle: 'Missiles over the river…',
         camera: { pos: [350, 150, 950], look: [-80, 30, 720] },
-        street: { pos: eye(-20, 700, 2.4), look: eye(-70, 745, 8) },
         env: { skyTop: '#4a5560', skyBottom: '#8a8070', sunDir: [0.3, 0.25, -0.55], sunColor: '#d0b890', sunIntensity: 1.2, ambient: 0.55, fogColor: '#787468', fogDensity: 0.0014, haze: 0.8 },
         story: `<p>Since February 2022 Dnipro has lived an hour's flight from the front — close enough to bleed, strong enough to hold. Missiles have struck its homes again and again; worst of all on <b>14 January 2023</b>, when a heavy anti-ship missile levelled a nine-storey apartment block in the riverside districts, killing <b>46 civilians</b>. The smoke you see rises there.</p>
 <p>And still the city does what it has always done: makes things and mends people. Its plants turn to armour and drones, its logistics feed the eastern front, and Mechnikov's surgeons work through the sirens, as they have since 2014.</p>`,
@@ -488,7 +475,6 @@ export function buildConfig() {
         caption: 'Steel, rockets, resilience — one skyline.',
         transitTitle: 'Toward today…',
         camera: { pos: [700, 190, 500], look: [-100, 50, 200] },
-        street: { pos: eye(370, 210, 2.6), look: eye(-100, 170, 30) },
         env: { skyTop: '#5f9fd8', skyBottom: '#ecdfc0', sunDir: [0.55, 0.55, -0.4], sunColor: '#fff6d8', sunIntensity: 2.5, ambient: 1.05, fogColor: '#d8dcd4', fogDensity: 0.0006, haze: 0.3 },
         story: `<p>Look around: the layers are all present. Monastyrskyi Island with its rebuilt church. The prospekt Potemkin drew, still the city's spine. The classical cathedral inside its giant's foundation. The bridges of 1884, 1932 — its arches striding over the island — and 1966. Smokestacks upstream, the Menorah's seven towers on the hill, panelky and glass along the water, and the embankment stitching it all together.</p>
 <p>A city founded as an empress's compliment, raised by iron, hidden for rockets, and revealed — in its hardest years — as one of the sturdiest corners of a free country.</p>`,

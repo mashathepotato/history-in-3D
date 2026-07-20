@@ -391,7 +391,6 @@ export function buildConfig() {
         caption: 'Where the river narrows enough for a bridge, an empire plants a town.',
         transitTitle: 'Rome reaches the Thames…',
         camera: { pos: [500, 110, 420], look: [180, 15, -80] },
-        street: { pos: eye(180, -120, 2.4), look: [180, 10, 56] },
         env: { skyTop: '#7fa8d0', skyBottom: '#e0d4b4', sunDir: [0.5, 0.5, -0.4], sunColor: '#fff0c8', sunIntensity: 2.2, ambient: 0.95, fogColor: '#ccd0c4', fogDensity: 0.0008, haze: 0.5 },
         story: `<p>Around <b>47–50 AD</b>, a few years after the Roman invasion, engineers found the lowest point where the Thames could be bridged — and <b>Londinium</b> was born at the north end of that bridge. No ancient tribe had a capital here; London is a Roman start-up, sited purely for logistics: a tidal river deep enough for sea-ships, narrow enough for a crossing.</p>
 <p>The first town is a huddle of timber-and-clay buildings along two gravel hills, with the wooden bridge — ancestor of every London Bridge since — already carrying the road that will become Watling Street.</p>`,
@@ -402,7 +401,6 @@ export function buildConfig() {
         caption: 'The queen of the Iceni leaves a layer of red ash.',
         transitTitle: 'Rebellion sweeps south…',
         camera: { pos: [-250, 130, 350], look: [100, 20, -200] },
-        street: { pos: eye(40, -160, 2.4), look: eye(120, -220, 4) },
         env: { skyTop: '#6a5548', skyBottom: '#c88a50', sunDir: [0.3, 0.3, -0.55], sunColor: '#ff9a50', sunIntensity: 1.6, ambient: 0.55, fogColor: '#a08268', fogDensity: 0.0013, haze: 0.75 },
         story: `<p>In 60–61 AD <b>Boudica</b>, queen of the Iceni, rose against Roman rule after unbearable provocation — her kingdom seized, her daughters assaulted. Her army destroyed Colchester, then fell on the young, undefended Londinium. Everyone who could not flee was killed; the town burned so hot that it left a <b>layer of fired red clay</b> that archaeologists still strike a few metres beneath the City's banks.</p>
 <p>Rome crushed the revolt, and rebuilt. Within a generation Londinium was back — bigger, and this time it would be given walls.</p>`,
@@ -413,7 +411,6 @@ export function buildConfig() {
         caption: 'A forum bigger than any north of the Alps.',
         transitTitle: 'Londinium in stone…',
         camera: { pos: [550, 130, -520], look: [150, 20, -220] },
-        street: { pos: eye(180, -200, 2.4), look: eye(210, -235, 8) },
         env: { skyTop: '#6fa5d8', skyBottom: '#e4d8b8', sunDir: [0.5, 0.55, -0.4], sunColor: '#fff2cc', sunIntensity: 2.3, ambient: 0.95, fogColor: '#d4d8cc', fogDensity: 0.0007, haze: 0.4 },
         story: `<p>Londinium at its Roman height: capital of Britannia, perhaps 30,000 people. Its <b>forum-basilica</b> on Cornhill — the town hall and law courts — was the <b>largest basilica north of the Alps</b>, longer than today's St Paul's. An amphitheatre roared where Guildhall now stands, and around the year 200 the city was girdled with the <b>London Wall</b>: three kilometres of Kentish ragstone that would define the City's shape for 1,500 years.</p>
 <p>Ships from Gaul and the Mediterranean tie up at timber quays; the bridge hums with carts on Watling Street.</p>`,
@@ -424,7 +421,6 @@ export function buildConfig() {
         caption: 'Two Londons: the ghost in the walls, the market on the Strand.',
         transitTitle: 'Centuries of quiet, then the longships…',
         camera: { pos: [-500, 120, 300], look: [-150, 20, -150] },
-        street: { pos: eye(-330, -190, 2.4), look: eye(-250, -160, 4) },
         env: { skyTop: '#7aa8c8', skyBottom: '#dcd4b8', sunDir: [0.45, 0.45, -0.45], sunColor: '#f8ecc8', sunIntensity: 2.0, ambient: 0.9, fogColor: '#ccd0c4', fogDensity: 0.00085, haze: 0.55 },
         story: `<p>After Rome withdrew, the walled city stood <b>almost empty for four hundred years</b> — a stone ghost the Saxons avoided, perhaps out of awe. Their London was <b>Lundenwic</b>, "London market": a beach-trading town of huts strung along today's Strand, just west of the walls — the district's name literally means "shore".</p>
 <p>Then came the Vikings, who found an undefended market irresistible. In <b>886</b> King <b>Alfred the Great</b> moved London back <i>inside</i> the Roman walls, refounding it as the fortified burh of <b>Lundenburg</b>. The old market site was abandoned — remembered only as <i>Ald-wych</i>, "the old settlement", still on the map today.</p>`,
@@ -435,7 +431,6 @@ export function buildConfig() {
         caption: 'A white tower to awe a conquered city.',
         transitTitle: 'The Normans arrive…',
         camera: { pos: [650, 100, -350], look: [390, 25, -95] },
-        street: { pos: eye(330, -170, 2.4), look: eye(380, -100, 12) },
         env: { skyTop: '#6fa5d4', skyBottom: '#e0d8bc', sunDir: [0.5, 0.55, -0.4], sunColor: '#fff2cc', sunIntensity: 2.3, ambient: 0.95, fogColor: '#d0d4c8', fogDensity: 0.00075, haze: 0.45 },
         story: `<p>William the Conqueror took London's submission in 1066 — and immediately began building the <b>White Tower</b> in the wall's southeast corner, a Norman keep of Caen stone deliberately vast beyond anything English eyes had seen. It was fortress, palace and statement in one: <i>the Crown is watching the City</i>.</p>
 <p>Upstream at Westminster, Edward the Confessor's great abbey church — consecrated days before his death in <b>1065</b> — had just crowned William on Christmas Day 1066. The twin poles of English history are now set: <b>Westminster rules, the City trades</b>, and the road between them — the Strand — becomes the most important street in the kingdom.</p>`,
@@ -446,7 +441,6 @@ export function buildConfig() {
         caption: 'A street of shops standing in the middle of a river.',
         transitTitle: 'The city fills its walls…',
         camera: { pos: [450, 90, 380], look: [180, 15, 40] },
-        street: { pos: eye(180, 150, 2.6), look: [180, 14, 60] },
         env: { skyTop: '#6aa5d4', skyBottom: '#e4d8b4', sunDir: [0.4, 0.55, -0.45], sunColor: '#fff2cc', sunIntensity: 2.3, ambient: 0.95, fogColor: '#d4d8cc', fogDensity: 0.00075, haze: 0.45 },
         story: `<p>Medieval London brims against its Roman walls: perhaps <b>80,000 people</b>, over a hundred parish churches, and two wonders. <b>Old London Bridge</b> (finished 1209) carries an entire street of houses and shops on nineteen stone arches — with a chapel in the middle and, in grim centuries, traitors' heads on the southern gate. Its narrow arches dam the river so fiercely that "shooting the bridge" by boat could be lethal.</p>
 <p>Above the rooftops soars <b>Old St Paul's</b>, its spire — completed with the cathedral around 1314 — one of the tallest structures medieval Europe ever raised.</p>`,
@@ -457,7 +451,6 @@ export function buildConfig() {
         caption: 'All the world’s a stage — just outside the City’s jurisdiction.',
         transitTitle: 'Players cross the river…',
         camera: { pos: [-150, 90, 450], look: [130, 20, 150] },
-        street: { pos: eye(95, 195, 2.4), look: eye(120, 158, 6) },
         env: { skyTop: '#7fa8cc', skyBottom: '#e0d4b4', sunDir: [0.45, 0.5, -0.4], sunColor: '#ffeec4', sunIntensity: 2.2, ambient: 0.95, fogColor: '#ccd0c8', fogDensity: 0.0008, haze: 0.5 },
         story: `<p>The City's stern fathers banned playhouses within their walls — so the theatres went to <b>Southwark</b>, the unruly south bank of bear-pits, taverns and everything else forbidden. In <b>1599</b> the Lord Chamberlain's Men raised the <b>Globe</b> here, and a glover's son from Stratford premiered <i>Hamlet</i>, <i>Lear</i> and <i>Macbeth</i> under its thatch to two thousand groundlings at a penny a head.</p>
 <p>London has burst its walls: Tudor timber suburbs sprawl along every road, and the bridge — still the only one — is jammed day and night.</p>`,
@@ -468,7 +461,6 @@ export function buildConfig() {
         caption: 'Four days. Four-fifths of the City.',
         transitTitle: 'A spark in a bakery on Pudding Lane…',
         camera: { pos: [-200, 140, 420], look: [100, 25, -150] },
-        street: { pos: eye(230, -95, 2.4), look: eye(150, -150, 6) },
         env: { skyTop: '#5a4438', skyBottom: '#c8783c', sunDir: [0.3, 0.28, -0.55], sunColor: '#ff8c40', sunIntensity: 1.6, ambient: 0.5, fogColor: '#96704c', fogDensity: 0.0016, haze: 0.85 },
         story: `<p>In the small hours of <b>2 September 1666</b>, a fire in Thomas Farriner's bakery on Pudding Lane met a dry east wind and a city built of timber and pitch. It burned for four days and consumed almost everything inside the walls: <b>13,200 houses, 87 churches, and Old St Paul's itself</b> — whose stones exploded and whose roof-lead ran down Ludgate Hill like water.</p>
 <p>The year before, the Great Plague had killed some 70,000 Londoners. Now the survivors stood on the fields north of the wall and watched the medieval city end.</p>`,
@@ -479,7 +471,6 @@ export function buildConfig() {
         caption: 'A dome where the gothic spire fell, and a flock of white steeples.',
         transitTitle: 'Brick by brick, steeple by steeple…',
         camera: { pos: [-450, 130, 300], look: [-80, 40, -180] },
-        street: { pos: eye(-160, -140, 2.4), look: eye(-85, -195, 20) },
         env: { skyTop: '#5f9fd8', skyBottom: '#ecdfc0', sunDir: [0.45, 0.6, -0.4], sunColor: '#fff6d8', sunIntensity: 2.5, ambient: 1.0, fogColor: '#dcdccc', fogDensity: 0.00065, haze: 0.35 },
         story: `<p>Sir <b>Christopher Wren</b> — astronomer turned architect — gave the burned City a new silhouette: <b>51 rebuilt parish churches</b>, each with a differently-invented white steeple, gathered around his masterpiece. The new <b>St Paul's Cathedral</b> (1675–1710) raised the first great classical dome in England, 111 metres of Portland stone where the gothic spire had stood.</p>
 <p>By the bridge, his <b>Monument</b> to the Fire stands exactly 202 feet tall — the distance from its base to the bakery where the fire began. The rebuilt City is brick, wider-streeted, and insured.</p>`,
@@ -490,7 +481,6 @@ export function buildConfig() {
         caption: 'Trains under the streets — a world first — and an empire’s parliament rising.',
         transitTitle: 'Steam, brick, fog…',
         camera: { pos: [-1050, 130, 300], look: [-800, 30, -30] },
-        street: { pos: eye(-720, -50, 2.4), look: eye(-795, 12, 25) },
         env: { skyTop: '#8a94a0', skyBottom: '#c4b494', sunDir: [0.35, 0.4, -0.4], sunColor: '#e8d4a8', sunIntensity: 1.8, ambient: 0.8, fogColor: '#b0a488', fogDensity: 0.0012, haze: 0.7 },
         story: `<p>London is now the <b>largest city humanity has ever built</b> — three million people and climbing, capital of a quarter of the world. After the old palace burned in 1834, the <b>Houses of Parliament</b> rise along the river in golden gothic; the clock tower's great bell, <b>Big Ben</b>, first struck in 1859.</p>
 <p>And beneath the streets, something unprecedented: on <b>10 January 1863</b> the Metropolitan Railway carried thirty thousand passengers in gas-lit carriages behind steam engines — <b>the world's first underground railway</b>. Above ground, Bazalgette is embanking the Thames and burying the sewers that will end the cholera; gas lamps — a London invention of 1807 — line every street.</p>`,
@@ -501,7 +491,6 @@ export function buildConfig() {
         caption: 'A drawbridge dressed as a castle, for the busiest port on Earth.',
         transitTitle: 'The port roars…',
         camera: { pos: [700, 120, 400], look: [430, 25, 60] },
-        street: { pos: eye(430, -140, 2.4), look: [430, 20, 60] },
         env: { skyTop: '#8a9caa', skyBottom: '#ccb894', sunDir: [0.4, 0.45, -0.4], sunColor: '#ecd8ac', sunIntensity: 1.9, ambient: 0.85, fogColor: '#b4a88c', fogDensity: 0.0011, haze: 0.65 },
         story: `<p><b>Tower Bridge</b>, completed in <b>1894</b>, is Victorian engineering in fancy dress: a steel bascule drawbridge clothed in gothic stone so as not to embarrass the ancient Tower beside it. Its roadway lifts a thousand times a year for the tall ships of the <b>Pool of London</b> — the stretch of river behind you, then the busiest port in the world.</p>
 <p>Downstream, the docks stretch for miles — tobacco, tea, wool, ivory — worked by the East End terraces pressed around them. Six million people; the map of the Underground is already sprawling; a quarter of the planet's trade passes this river.</p>`,
@@ -512,7 +501,6 @@ export function buildConfig() {
         caption: 'St Paul’s stands in a sea of fire.',
         transitTitle: 'The sirens begin…',
         camera: { pos: [-350, 160, 380], look: [-70, 40, -190] },
-        street: { pos: eye(-150, -160, 2.4), look: eye(-85, -195, 22) },
         env: { skyTop: '#2e3138', skyBottom: '#7a5a44', sunDir: [0.25, 0.2, -0.5], sunColor: '#e08850', sunIntensity: 1.0, ambient: 0.45, fogColor: '#5f584c', fogDensity: 0.0016, haze: 0.85 },
         story: `<p>For <b>57 consecutive nights</b> from 7 September 1940, and on through May 1941, the Luftwaffe bombed London. The docks and the East End burned first and worst; on the night of <b>29 December 1940</b> — the "Second Great Fire of London" — incendiaries set the whole City alight, and a photographer on the Daily Mail's roof caught <b>St Paul's dome riding above the smoke</b>: the war's most famous image of defiance.</p>
 <p>Some <b>20,000 Londoners were killed</b>, a million homes wrecked; families slept in their thousands on Underground platforms. Churchill's orders for the cathedral that night were simple: <i>St Paul's must be saved at all costs.</i> It was — the fires reached the churchyard and stopped.</p>`,
@@ -523,7 +511,6 @@ export function buildConfig() {
         caption: 'Concrete towers on the bomb-sites; the last fog lifts.',
         transitTitle: 'Rebuilding, rationing, rock and roll…',
         camera: { pos: [900, 140, -450], look: [600, 30, -130] },
-        street: { pos: eye(640, -125, 2.4), look: eye(700, -145, 20) },
         env: { skyTop: '#7aa0c0', skyBottom: '#d8d0b8', sunDir: [0.45, 0.5, -0.4], sunColor: '#f4e8c4', sunIntensity: 2.1, ambient: 0.95, fogColor: '#c8ccc0', fogDensity: 0.0008, haze: 0.45 },
         story: `<p>The bomb-sites sprouted <b>council tower blocks</b> — the East End rebuilt vertically — while the <b>Great Smog of December 1952</b>, which killed thousands in five days, finally forced the Clean Air Act: the coal fog that had defined London for a century simply ended. The last tram ran in 1952; the red <b>double-decker</b> became the city's moving emblem.</p>
 <p>By the mid-sixties the grey city had gone unexpectedly vivid: Carnaby Street, the Beatles at Abbey Road, the <b>Post Office Tower</b> (1965) rising like an exclamation mark over Fitzrovia — the tallest building in Britain, with a revolving restaurant.</p>`,
@@ -534,7 +521,6 @@ export function buildConfig() {
         caption: 'The docks reborn as a second Manhattan; a shard above the bridge.',
         transitTitle: 'Cranes over the river again…',
         camera: { pos: [-150, 150, 500], look: [250, 60, -50] },
-        street: { pos: eye(-700, 100, 2.4), look: [-715, 60, 45] },
         env: { skyTop: '#6fa0cc', skyBottom: '#dcd8c4', sunDir: [0.5, 0.55, -0.4], sunColor: '#fff2cc', sunIntensity: 2.3, ambient: 1.0, fogColor: '#ccd4d0', fogDensity: 0.0007, haze: 0.4 },
         story: `<p>The dead docks became <b>Canary Wharf</b>: One Canada Square (1991) planted a Manhattan skyline on the Isle of Dogs, and the banks followed. The old City answered with towers of its own — the <b>Gherkin</b> (2004) among the steeples — while the <b>London Eye</b> (2000) set a slow-turning wheel opposite Parliament, and <b>the Shard</b> (2012) rose 310 metres over Southwark, Western Europe's tallest building, straight above the borough where the Globe once stood.</p>
 <p>In the summer of 2012 the Olympics opened in the East End — the same streets the Blitz had burned — and the city, nine million strong again, threw itself a party.</p>`,
@@ -545,7 +531,6 @@ export function buildConfig() {
         caption: 'Two thousand years, one bridge-crossing.',
         transitTitle: 'Toward today…',
         camera: { pos: [750, 170, 550], look: [-100, 40, -100] },
-        street: { pos: eye(180, 130, 2.6), look: eye(-80, -195, 30) },
         env: { skyTop: '#5f9fd8', skyBottom: '#ecdfc0', sunDir: [0.55, 0.55, -0.4], sunColor: '#fff6d8', sunIntensity: 2.4, ambient: 1.05, fogColor: '#d8dcd4', fogDensity: 0.0006, haze: 0.3 },
         story: `<p>Look around: the Roman bridge-crossing still fixes the map. The wall's line still bounds the Square Mile. Wren's dome still holds the skyline by law — protected viewing corridors bend the towers around it. The Abbey still crowns kings; the Tower still keeps its ravens; the double-deckers still run down the Strand, over the spot where Saxons beached their boats.</p>
 <p>A city that has burned to the ground twice, been bombed for months, buried its river's port and grown a new one — and at every turn simply resumed. Twenty centuries in, London remains what it was on day one: the place where the road crosses the river.</p>`,

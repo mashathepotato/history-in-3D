@@ -60,19 +60,6 @@ export class CameraRig {
     this._easeBackOffsets = true;
   }
 
-  // Street-view: glide down to eye level at `pos`, facing `look` (optional).
-  dropTo(pos, look, instant = false) {
-    this.freeMode = true;
-    this.freePos.set(pos[0], pos[1], pos[2]);
-    if (instant) this.camera.position.copy(this.freePos);
-    if (look) {
-      const dx = look[0] - pos[0], dy = look[1] - pos[1], dz = look[2] - pos[2];
-      this.baseYaw = Math.atan2(dx, dz);
-      this.basePitch = Math.atan2(dy, Math.hypot(dx, dz));
-      this.yaw = 0;
-      this.pitch = 0;
-    }
-  }
 
   update(dt, stops, seg) {
     const t = this.timeline;

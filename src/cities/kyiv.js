@@ -598,7 +598,6 @@ export function buildConfig() {
         caption: 'Three brothers and a sister stop on a hill above the Dnipro…',
         transitTitle: 'The first centuries…',
         camera: { pos: [-255, 105, -475], look: [-95, 60, -318] },
-        street: { pos: eye(-118, -355, 2.6), look: eye(-80, -320, 1.5) },
         env: { skyTop: '#7fa8d0', skyBottom: '#e8cfa0', sunDir: [0.75, 0.3, -0.45], sunColor: '#ffdca0', sunIntensity: 2.0, ambient: 0.85, fogColor: '#d8c8a8', fogDensity: 0.0009, haze: 0.55 },
         story: `<p>The chronicle tells of three brothers — <b>Kyi</b>, <b>Shchek</b> and <b>Khoryv</b> — and their sister <b>Lybid</b>, of the Slavic tribe of the Polianians, who settled these hills. The city took the eldest brother's name: <b>Kyiv</b>, "Kyi's place". Each sibling left a mark on the map that survives today — Shchekavytsia and Khorevytsia hills, and the little river Lybid.</p>
 <p>What you see is a fortified hilltop hamlet on <b>Starokyivska Hill</b>: semi-dugout houses with earthen roofs, a timber palisade, smoke rising from clay stoves. Below, the great river — the future highway of an empire.</p>`,
@@ -609,7 +608,6 @@ export function buildConfig() {
         caption: 'From the Varangians to the Greeks — and Kyiv holds the middle.',
         transitTitle: 'Trade quickens on the Dnipro…',
         camera: { pos: [520, 60, -900], look: [280, 10, -560] },
-        street: { pos: eye(240, -580, 2.6), look: eye(330, -630, 3) },
         env: { skyTop: '#6fa5d8', skyBottom: '#e0d4b0', sunDir: [0.5, 0.5, -0.5], sunColor: '#fff0c0', sunIntensity: 2.2, ambient: 0.9, fogColor: '#d0d4c8', fogDensity: 0.0008, haze: 0.45 },
         story: `<p>By the 9th century Kyiv commands the <b>route "from the Varangians to the Greeks"</b> — the river road linking Scandinavia to Constantinople. Below the hills, at the mouth of the little Pochaina river, grows <b>Podil</b>: the harbour town of merchants and craftsmen. Tree-ring dating of its preserved log houses shows organized streets here by <b>the year 887</b>.</p>
 <p>Watch the boats: Varangian longships and traders' sails. In Podil's lanes live the potters (<i>Honchari</i>) and tanners (<i>Kozhemyaky</i>) — neighbourhood names the city still uses eleven centuries later.</p>`,
@@ -620,7 +618,6 @@ export function buildConfig() {
         caption: 'The idols fall. A whole city walks into the river.',
         transitTitle: 'Volodymyr chooses a faith…',
         camera: { pos: [620, 55, -780], look: [430, 0, -620] },
-        street: { pos: eye(398, -628, 2.6), look: [455, 3, -648] },
         env: { skyTop: '#8fb8e0', skyBottom: '#f0e0b8', sunDir: [0.6, 0.55, -0.35], sunColor: '#fff4d0', sunIntensity: 2.4, ambient: 1.0, fogColor: '#dce0d4', fogDensity: 0.0007, haze: 0.4 },
         story: `<p>In 980 Grand Prince <b>Volodymyr</b> raised six wooden idols on the hill by his palace — chief among them <b>Perun</b> the thunder god, wooden with a <b>silver head and golden moustache</b>. Eight years later, Volodymyr chose Byzantine Christianity. Perun was toppled, dragged by horses, and thrown into the Dnipro; the people of Kyiv were baptized together in the river shallows — look for them below.</p>
 <p>Immediately after, Byzantine masters began the first stone church of Rus: the <b>Church of the Tithes</b> (989–996), funded by a tenth of the prince's income. So rich in marble that chroniclers called it simply "the marble church".</p>`,
@@ -631,7 +628,6 @@ export function buildConfig() {
         caption: 'A cathedral to rival Constantinople.',
         transitTitle: 'Yaroslav builds his city…',
         camera: { pos: [-490, 110, -420], look: [-270, 70, -190] },
-        street: { pos: eye(-320, -238, 2.4), look: eye(-278, -192, 14) },
         env: { skyTop: '#5f9fd8', skyBottom: '#e8ddb8', sunDir: [0.45, 0.65, -0.4], sunColor: '#fff6d8', sunIntensity: 2.5, ambient: 1.0, fogColor: '#d8dcd0', fogDensity: 0.00065, haze: 0.35 },
         story: `<p>Under <b>Yaroslav the Wise</b> Kyiv exploded in size. A rampart of oak cribs packed with earth — up to 14 metres high — enclosed a new upper city, pierced by the ceremonial <b>Golden Gate</b>, its archway crowned with a gilded chapel visible for miles, echoing Constantinople's own Golden Gate.</p>
 <p>At the centre rose <b>Saint Sophia Cathedral</b> — dedicated, like Constantinople's Hagia Sophia, to Holy Wisdom. Look at it now: not white, but <b>striped pink</b> — bare <i>plinfa</i> brick banded with crushed-brick mortar — carrying <b>13 lead-grey domes</b>, one for Christ, twelve for the apostles, stepping up in a pyramid. Inside: the largest surviving ensemble of 11th-century mosaics and frescoes in the world, including the golden <b>Oranta</b>, the praying Mother of God, who has never left her apse.</p>`,
@@ -642,7 +638,6 @@ export function buildConfig() {
         caption: 'Forty stone churches above a sea of timber roofs.',
         transitTitle: 'Monasteries multiply…',
         camera: { pos: [180, 150, -80], look: [-60, 60, -300] },
-        street: { pos: eye(-62, -322, 2.4), look: eye(-30, -295, 12) },
         env: { skyTop: '#6aa5d4', skyBottom: '#e4d8b4', sunDir: [0.35, 0.6, -0.5], sunColor: '#fff2cc', sunIntensity: 2.4, ambient: 0.95, fogColor: '#d4d8cc', fogDensity: 0.0007, haze: 0.4 },
         story: `<p>Kyiv at its medieval zenith: <b>perhaps 40–50,000 people</b> — the size of Paris, larger than London. Chronicles boast of "400 churches"; archaeology confirms dozens in stone, rising above thousands of log houses.</p>
 <p>On the hill nearest you gleams <b>St. Michael's Golden-Domed Monastery</b> (1108–1113) — by tradition the <b>first gilded dome in Rus</b>, the innovation that named a whole civilization's skyline. South along the bluffs, monks have burrowed the <b>Caves Monastery — the Pechersk Lavra</b> — since 1051, its underground cells now crowned by the single-domed <b>Dormition Cathedral</b> (1073–1089), the model copied across the East Slavic world.</p>`,
@@ -653,7 +648,6 @@ export function buildConfig() {
         caption: 'Nine days of siege. The city of 50,000 becomes a ruin of 2,000.',
         transitTitle: 'The horde approaches…',
         camera: { pos: [-360, 130, -560], look: [-120, 45, -320] },
-        street: { pos: eye(-150, -315, 2.4), look: eye(-118, -330, 8) },
         env: { skyTop: '#6a5548', skyBottom: '#c88a50', sunDir: [0.3, 0.25, -0.6], sunColor: '#ff9a50', sunIntensity: 1.6, ambient: 0.55, fogColor: '#a08268', fogDensity: 0.0014, haze: 0.75 },
         story: `<p><b>Batu Khan's</b> army reached Kyiv in late November 1240. Catapults battered the ramparts near the Lyadski Gate — today's Maidan — until the wall broke. On <b>6 December</b> the city fell. The last defenders and hundreds of townspeople crowded into the Church of the Tithes; the chronicle says the building <b>collapsed under their weight</b>.</p>
 <p>Of some fifty thousand Kyivans, <b>perhaps two thousand survived</b>. Of about forty stone buildings, six still stood — Sophia among them, pillaged but standing. Six years later a papal envoy passed through and counted <b>barely two hundred houses</b>.</p>`,
@@ -664,7 +658,6 @@ export function buildConfig() {
         caption: 'A wooden castle guards a town of merchants.',
         transitTitle: 'Life gathers again by the river…',
         camera: { pos: [280, 90, -800], look: [-10, 55, -500] },
-        street: { pos: eye(185, -585, 2.4), look: eye(-18, -470, 26) },
         env: { skyTop: '#7aa8c8', skyBottom: '#dcd4b8', sunDir: [0.5, 0.5, -0.45], sunColor: '#f8ecc8', sunIntensity: 2.1, ambient: 0.9, fogColor: '#ccd0c4', fogDensity: 0.0008, haze: 0.5 },
         story: `<p>After the Battle of Blue Waters (1362) Kyiv passed to the <b>Grand Duchy of Lithuania</b>. On the steep hill above Podil — ever after called <b>Zamkova Hora</b>, Castle Hill — princes raised a <b>wooden fortress</b>: log walls, three-tiered watchtowers, wells sixty metres deep, and the only clock in town.</p>
 <p>The real city is below: <b>Podil</b>, with its market, harbour, and town hall. Around 1494–1497 Kyiv received <b>Magdeburg rights</b> — European urban self-government, with elected burgomasters. The upper city remains a meadow of ruins where Sophia's domes rise over grazing goats; monks patch the old cathedral as best they can.</p>`,
@@ -675,7 +668,6 @@ export function buildConfig() {
         caption: 'Bells of Sophia ring for the Hetman.',
         transitTitle: 'The steppe rises…',
         camera: { pos: [-560, 60, -300], look: [-420, 30, -160] },
-        street: { pos: eye(-472, -195, 2.4), look: eye(-435, -168, 9) },
         env: { skyTop: '#7fa8d0', skyBottom: '#e8d8b0', sunDir: [0.55, 0.45, -0.4], sunColor: '#fff0c8', sunIntensity: 2.2, ambient: 0.95, fogColor: '#d4d4c4', fogDensity: 0.00075, haze: 0.45 },
         story: `<p>In December 1648 Hetman <b>Bohdan Khmelnytsky</b>, leading the great Cossack uprising against Polish rule, entered Kyiv <b>through the ancient Golden Gate</b> — a deliberate act of political theatre. Students of the academy sang; the bells of Sophia rang; the Patriarch of Jerusalem hailed him as a new Moses. The crowd below is waiting for him.</p>
 <p>Kyiv's mind was ready: since <b>1632</b> Metropolitan <b>Petro Mohyla</b>'s collegium — the future <b>Kyiv-Mohyla Academy</b> — had made Podil the intellectual capital of the Orthodox world, teaching Latin rhetoric and philosophy to future hetmans and philosophers alike.</p>`,
@@ -686,7 +678,6 @@ export function buildConfig() {
         caption: 'The old stones put on white and gold.',
         transitTitle: 'A golden skin over Byzantium…',
         camera: { pos: [-470, 130, -390], look: [-265, 65, -180] },
-        street: { pos: eye(-248, -148, 2.4), look: eye(-280, -190, 16) },
         env: { skyTop: '#5f9fd8', skyBottom: '#f0e2bc', sunDir: [0.4, 0.6, -0.45], sunColor: '#fff6d8', sunIntensity: 2.5, ambient: 1.0, fogColor: '#dcdccc', fogDensity: 0.00065, haze: 0.35 },
         story: `<p>Hetman <b>Ivan Mazepa</b> poured Cossack wealth into the holy places. Between 1690 and 1707 <b>Saint Sophia was reborn</b>: the battered Byzantine walls plastered and whitewashed, the shallow lead domes replaced with <b>pear-shaped cupolas of green and gold</b>, ornate gables added — the style we now call <b>Ukrainian Baroque</b>. A monumental bell tower rose beside it (1699–1706); Mazepa's 13-ton bell still hangs there.</p>
 <p>The Lavra received the same golden re-dressing, and later its <b>Great Bell Tower</b> (1731–1745) — at 96.5 metres the tallest structure in the Russian Empire when built. Watch it climb above the Pechersk woods.</p>`,
@@ -697,7 +688,6 @@ export function buildConfig() {
         caption: 'A university the colour of an order’s ribbon.',
         transitTitle: 'The empire builds in stone…',
         camera: { pos: [-540, 100, 260], look: [-330, 40, 90] },
-        street: { pos: eye(-368, 42, 2.4), look: eye(-332, 80, 10) },
         env: { skyTop: '#84aed4', skyBottom: '#e4dcc0', sunDir: [0.5, 0.55, -0.35], sunColor: '#fff2cc', sunIntensity: 2.3, ambient: 0.95, fogColor: '#d4d8cc', fogDensity: 0.0007, haze: 0.4 },
         story: `<p>Under the Russian Empire, Kyiv became a governorate capital and garrison city. Its grandest statement: <b>St. Volodymyr University</b> (1837–1842) by Vincenzo Beretti — a vast classical quadrangle painted <b>deep red with black capitals</b>, the colours of the ribbon of the Order of St. Vladimir. (The legend that a tsar painted it red to shame rebellious students is just that — a legend.)</p>
 <p>Nearby, a wooded ravine called <b>Khreshchatyk</b> is filling with houses — the 1837 plan has just fixed the line of what will become the most famous street in Ukraine. On the hill above the river, the turquoise <b>Mariinskyi Palace</b> (Rastrelli's design, 1750s) hosts visiting empresses; St. Andrew's teal-and-white silhouette floats above Podil.</p>`,
@@ -708,7 +698,6 @@ export function buildConfig() {
         caption: 'The first electric tram in the empire climbs a Kyiv hill.',
         transitTitle: 'Chimneys and cupolas…',
         camera: { pos: [320, 120, 180], look: [60, 30, -40] },
-        street: { pos: eye(112, 52, 2.4), look: eye(62, 160, 5) },
         env: { skyTop: '#7fa8cc', skyBottom: '#e0d4b8', sunDir: [0.45, 0.5, -0.4], sunColor: '#ffeec4', sunIntensity: 2.2, ambient: 0.95, fogColor: '#ccd0c8', fogDensity: 0.00075, haze: 0.5 },
         story: `<p>Sugar-beet fortunes, railways and the Dnipro made Kyiv boom. <b>Khreshchatyk</b> is now a canyon of banks, theatres and department stores; in <b>1892</b> the city launched the <b>first electric tram in the Russian Empire</b> to conquer its impossible hills, and in 1905 a <b>funicular</b> began hauling passengers up from Podil.</p>
 <p>The skyline gained the seven-domed, mustard-yellow <b>St. Volodymyr's Cathedral</b> (1862–1896), its interior painted by Vasnetsov and Vrubel for the 900th anniversary of the Baptism. Chestnut trees — the city's future emblem — line the new boulevards.</p>`,
@@ -719,7 +708,6 @@ export function buildConfig() {
         caption: 'A twelfth-century monastery is dynamited for a parade ground.',
         transitTitle: 'The plan demands a square…',
         camera: { pos: [160, 110, -420], look: [-50, 55, -285] },
-        street: { pos: eye(-58, -252, 2.4), look: eye(-30, -295, 10) },
         env: { skyTop: '#8898a8', skyBottom: '#c8c4b4', sunDir: [0.4, 0.5, -0.3], sunColor: '#e8e4d0', sunIntensity: 1.9, ambient: 0.8, fogColor: '#b8bcb4', fogDensity: 0.0009, haze: 0.55 },
         story: `<p>In 1934 the Soviet government of Ukraine moved from Kharkiv back to Kyiv — and set about rebuilding the ancient centre as a stage for power. A colossal government square was planned where <b>St. Michael's Golden-Domed Monastery</b> stood. Its mosaics were stripped, its domes pulled down, and on <b>14 August 1937</b> the 800-year-old cathedral was <b>dynamited</b>.</p>
 <p>Only one building of the grand ensemble was ever finished — the stripped-classical colossus beside the void (today's Foreign Ministry). The empty hilltop where golden domes stood for eight centuries is the era's true monument.</p>`,
@@ -730,7 +718,6 @@ export function buildConfig() {
         caption: 'The main street is a minefield. The ravine has a name: Babyn Yar.',
         transitTitle: 'The front rolls over the city…',
         camera: { pos: [340, 140, 120], look: [90, 25, 30] },
-        street: { pos: eye(98, 64, 2.4), look: eye(62, 160, 4) },
         env: { skyTop: '#5a5f68', skyBottom: '#8a8478', sunDir: [0.3, 0.3, -0.5], sunColor: '#c0b8a0', sunIntensity: 1.3, ambient: 0.5, fogColor: '#8a887c', fogDensity: 0.0016, haze: 0.8 },
         story: `<p>German troops took Kyiv on 19 September 1941. Five days later, <b>radio-controlled mines</b> pre-laid by the retreating NKVD began detonating along <b>Khreshchatyk</b> — the first long-range radio demolition in the history of war. The fires burned for days and levelled the heart of the city. In November, the Lavra's thousand-year-old Dormition Cathedral was blown up.</p>
 <p>On 29–30 September 1941, in the ravine of <b>Babyn Yar</b> on the city's northwest edge, SS Einsatzgruppe C shot <b>33,771 Jews</b> in two days — one of the largest single massacres of the Holocaust. By war's end the ravine held as many as 100,000 dead: Jews, Roma, prisoners, patients, resisters.</p>`,
@@ -741,7 +728,6 @@ export function buildConfig() {
         caption: 'Chestnuts bloom over a brand-new ancient street.',
         transitTitle: 'Cranes over the ruins…',
         camera: { pos: [300, 100, 260], look: [70, 30, 40] },
-        street: { pos: eye(120, 8, 2.4), look: eye(70, 140, 5) },
         env: { skyTop: '#6fa5d4', skyBottom: '#dcd8c0', sunDir: [0.5, 0.6, -0.35], sunColor: '#fff2cc', sunIntensity: 2.4, ambient: 1.0, fogColor: '#ccd4cc', fogDensity: 0.0007, haze: 0.35 },
         story: `<p><b>Khreshchatyk</b> rose again (1949–1960) as a triumphal boulevard nearly 100 metres wide — cream-coloured ceramic facades in a style found nowhere else: <b>Stalinist neoclassicism wearing Ukrainian Baroque ornament</b>, under a promenade of chestnut trees.</p>
 <p>The city leapt across the river: the all-welded <b>Paton Bridge</b> (1953, a world first), then the <b>Metro</b> (1960), whose <b>Arsenalna station</b> — 105.5 metres down inside the river bluff — remained the deepest on Earth for six decades. On the flat left bank, seas of prefabricated <b>panelky</b> apartments begin their march to the horizon.</p>`,
@@ -752,7 +738,6 @@ export function buildConfig() {
         caption: 'Blue over yellow above Saint Sophia.',
         transitTitle: 'An empire dissolves…',
         camera: { pos: [-140, 90, -560], look: [-250, 55, -200] },
-        street: { pos: eye(-242, -142, 2.4), look: eye(-280, -190, 18) },
         env: { skyTop: '#5f9fd8', skyBottom: '#f0e4c0', sunDir: [0.45, 0.6, -0.4], sunColor: '#fff6d8', sunIntensity: 2.5, ambient: 1.05, fogColor: '#dce0d4', fogDensity: 0.0006, haze: 0.3 },
         story: `<p>On <b>24 August 1991</b>, as the Soviet Union broke apart, the parliament in Kyiv declared the <b>independence of Ukraine</b>. In December, over 90% of voters confirmed it. The blue-and-yellow flag — sky over wheat — rose over the ancient city for the first time since 1920.</p>
 <p>Kyiv, founded before most of Europe's capitals, became the capital of Europe's newest large state — inheriting a thousand years of layered history, and the task of deciding what to restore.</p>`,
@@ -763,7 +748,6 @@ export function buildConfig() {
         caption: 'A square becomes the centre of Europe.',
         transitTitle: 'Tents rise on the square…',
         camera: { pos: [280, 80, -180], look: [110, 25, -35] },
-        street: { pos: eye(96, -16, 2.4), look: eye(115, -35, 24) },
         env: { skyTop: '#70808f', skyBottom: '#b0a894', sunDir: [0.35, 0.4, -0.4], sunColor: '#e0d4b8', sunIntensity: 1.7, ambient: 0.75, fogColor: '#a8a89c', fogDensity: 0.0011, haze: 0.6 },
         story: `<p><b>Maidan Nezalezhnosti</b> — Independence Square — sits where the Lyadski Gate once stood, the gate the Mongols broke in 1240. Since 2001 the <b>Independence Monument</b>, a slender 61-metre column carrying the guardian-figure <b>Berehynia</b>, has watched over it.</p>
 <p>Here the <b>Orange Revolution</b> filled the square in 2004; and in the winter of 2013–14 the <b>Revolution of Dignity</b> built a barricaded tent city that withstood snipers' bullets. More than a hundred protesters — the <b>Heavenly Hundred</b> — were killed, most on 18–20 February 2014 on the slope just above the square.</p>`,
@@ -774,7 +758,6 @@ export function buildConfig() {
         caption: 'Kyiv in three days, they said.',
         transitTitle: 'Sirens over the Dnipro…',
         camera: { pos: [240, 150, -330], look: [-420, 40, -720] },
-        street: { pos: eye(96, 28, 2.4), look: eye(112, 18, 1.5) },
         env: { skyTop: '#4a5560', skyBottom: '#8a8070', sunDir: [0.3, 0.25, -0.55], sunColor: '#d0b890', sunIntensity: 1.2, ambient: 0.55, fogColor: '#787468', fogDensity: 0.0015, haze: 0.8 },
         story: `<p>On <b>24 February 2022</b> Russia launched a full-scale invasion, expecting to take Kyiv in days. Paratroopers struck Hostomel airfield on the northwest edge; a 64-kilometre armoured column crawled toward the city. Kyiv answered with flooded rivers, blown bridges, anti-tank hedgehogs on the boulevards, and its people queuing for rifles.</p>
 <p>The column never arrived. By <b>2 April 2022</b> the whole Kyiv region was liberated, leaving behind the murdered civilians of <b>Bucha</b> and Irpin as evidence of what occupation meant. The smoke on the northwestern horizon is that battle.</p>`,
@@ -785,7 +768,6 @@ export function buildConfig() {
         caption: 'Fifteen centuries, one skyline.',
         transitTitle: 'Toward today…',
         camera: { pos: [500, 190, -420], look: [-40, 60, -180] },
-        street: { pos: eye(128, -58, 2.4), look: eye(115, -35, 22) },
         env: { skyTop: '#5f9fd8', skyBottom: '#ecdfc0', sunDir: [0.55, 0.55, -0.4], sunColor: '#fff6d8', sunIntensity: 2.5, ambient: 1.05, fogColor: '#d8dcd4', fogDensity: 0.0006, haze: 0.3 },
         story: `<p>Look around: every era is still here. The hills of Kyi. Podil's street grid, aligned since the 800s. Sophia's Byzantine core in its baroque coat. The rebuilt gold of St. Michael's and the Lavra. Khreshchatyk's chestnuts. The panelky sea across the river, glass towers between them — and <b>Mother Ukraine</b> on the southern hill, trident on her shield, facing east.</p>
 <p>A city that has been capital of a medieval empire, a provincial ruin, a boomtown, a Soviet showcase, and the heart of a European democracy — and has outlived everyone who tried to end it.</p>`,

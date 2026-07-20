@@ -1,6 +1,8 @@
 // Bootstrap: pick a city (?city=kyiv), build the world, run the loop.
 import * as THREE from 'three';
-import { cities } from './cities/index.js';
+import { cities, hiddenCities } from './cities/index.js';
+import { reportValidation } from './engine/validate.js';
+import { generators } from './engine/buildings.js';
 import { Timeline } from './engine/timeline.js';
 import { World } from './engine/world.js';
 import { CameraRig } from './engine/controls.js';
@@ -35,6 +37,8 @@ const loaderSub = document.getElementById('loader-sub');
 
 async function start() {
   const cfg = await loadCity();
+  // hold every city (including yours) to the same quality bar — see console
+  reportValidation(cfg, { generatorNames: Object.keys(generators) });
   document.title = `History in 3D — Walk Through ${cfg.name}`;
   document.getElementById('loader-title').textContent = cfg.name;
 
@@ -47,17 +51,6 @@ async function start() {
   const ui = new UI(timeline, cfg);
   ui.onNavigate = () => rig.reattach();      // era jumps fly you back to the vantage
   ui.onNavigateSoft = () => {};              // wheel scrub keeps your position
-  // street-view toggle: drop to a curated eye-level spot for this era
-  // (or straight down from wherever you are), press again to fly back up
-  ui.onStreetToggle = (instant = false) => {
-    if (rig.freeMode) { rig.reattach(); return; }
-    const stop = cfg.stops[timeline.nearestStopIndex(timeline.year)];
-    if (stop.street) rig.dropTo(stop.street.pos, stop.street.look, instant);
-    else {
-      const p = camera.position;
-      rig.dropTo([p.x, cfg.terrain.heightAt(p.x, p.z) + 2.4, p.z], null, instant);
-    }
-  };
 
   // deep-link: ?year=1037 starts the journey at that year
   const startYear = parseFloat(params.get('year'));
@@ -92,13 +85,11 @@ async function start() {
 
   // open the first story after the intro settles
   setTimeout(() => { if (timeline.atStop() === 0) ui.showStory(0); }, 1800);
-  // ?street=1 deep-links straight into street level
-  if (params.has('street')) setTimeout(() => ui.onStreetToggle(params.has('snap')), 300);
 
   // city switcher links under the controls help
   const help = document.getElementById('help');
   for (const id of Object.keys(cities)) {
-    if (id === cityId) continue;
+    if (id === cityId || hiddenCities.has(id)) continue;
     const a = document.createElement('a');
     a.href = `?city=${id}`;
     a.textContent = `→ visit ${id[0].toUpperCase()}${id.slice(1)}`;

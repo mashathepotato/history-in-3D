@@ -34,8 +34,8 @@ function facadeTexture(style, base, accent) {
   g.fillStyle = base; g.fillRect(0, 0, 256, 256);
   g.fillStyle = accent;
   if (style === 'plinthite') {
-    // opus mixtum: thin brick bands in mortar
-    for (let y = 8; y < 256; y += 26) g.fillRect(0, y, 256, 7);
+    // opus mixtum: brick bands in mortar (bold enough to read at distance)
+    for (let y = 6; y < 256; y += 24) g.fillRect(0, y, 256, 11);
   } else if (style === 'windows') {
     for (let y = 20; y < 236; y += 56)
       for (let x = 16; x < 240; x += 44) g.fillRect(x, y, 20, 34);
@@ -76,7 +76,7 @@ export function facadeMat(style, base, accent, repeat = [1, 1]) {
     t.needsUpdate = true;
     t.repeat.set(repeat[0], repeat[1]);
     // faint self-glow keeps shadowed facades readable at street level
-    const glow = new THREE.Color(base).multiplyScalar(0.09);
+    const glow = new THREE.Color(base).multiplyScalar(0.05);
     matCache.set(key, new THREE.MeshStandardMaterial({ map: t, roughness: 0.9, emissive: glow }));
   }
   return matCache.get(key);
