@@ -63,6 +63,13 @@ St. Sophia in 1030 and scrolling forward.
   Maidan of 2014), fires and smoke for the sack of 1240 and the war years.
 - **Environment**: sky, sun, fog and water are keyframed per era — the amber
   haze of the Mongol sack, the grey of 1943, the clear light of independence.
+- **A full street map**: every district generates its capillary street
+  network procedurally (seeded, deterministic) — medieval lanes with wobble,
+  Georgian and imperial grids, Soviet microdistrict blocks — era-gated like
+  everything else, so the modern city reads like a proper map. London's
+  lanes are rebuilt on the same lines after the Great Fire, because that is
+  what actually happened. Buildings and trees settle into the blocks between
+  streets.
 - **Street life**: a connected road network (junction pads, sidewalks, dashed
   centerlines), gas lamps that become tall streetlights, ground-floor
   storefronts, and era-gated traffic — horse carts, the 1892 electric tram

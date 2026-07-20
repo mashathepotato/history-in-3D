@@ -1,7 +1,7 @@
 // Assembles a city config into a living scene and animates it through time.
 import * as THREE from 'three';
 import { buildTerrain, buildWater, buildSky } from './terrain.js';
-import { buildStructure, generators, rng } from './buildings.js';
+import { buildStructure, generators, rng, streetGridPaths } from './buildings.js';
 import { FireSystem, Birds, Boats, Crowds, Groves, Traffic } from './effects.js';
 import { easeOutBack, lerp } from './timeline.js';
 
@@ -59,15 +59,10 @@ export class World {
     this._excl = { segs: [], discs: [] };
     const FOOTPRINT = new Set(['church', 'classical', 'stalinka', 'panelka', 'glassTower',
       'bellTower', 'gate', 'woodCastle', 'motherland', 'column', 'stadium', 'townhouse']);
+    // pass 1: landmark and plaza footprints (grid streets must dodge these)
     for (const entry of cfg.structures) {
       for (const phase of entry.phases) {
-        if (phase.build === 'road') {
-          const hw = (phase.params?.w || 8) / 2;
-          const path = phase.params?.path || [];
-          for (let i = 0; i < path.length - 1; i++) {
-            this._excl.segs.push([path[i][0], path[i][1], path[i + 1][0], path[i + 1][1], hw]);
-          }
-        } else if (phase.build === 'plaza') {
+        if (phase.build === 'plaza') {
           this._excl.discs.push([entry.pos[0], entry.pos[1],
             Math.max(phase.params?.rx || 40, phase.params?.rz || 40) + 2]);
         } else if (FOOTPRINT.has(phase.build)) {
@@ -77,12 +72,39 @@ export class World {
         }
       }
     }
+    // pass 2: roads and generated street grids (buildings must dodge these)
+    for (const entry of cfg.structures) {
+      const seen = new Set();
+      for (const phase of entry.phases) {
+        if (phase.build === 'road') {
+          const hw = (phase.params?.w || 8) / 2;
+          const path = phase.params?.path || [];
+          for (let i = 0; i < path.length - 1; i++) {
+            this._excl.segs.push([path[i][0], path[i][1], path[i + 1][0], path[i + 1][1], hw]);
+          }
+        } else if (phase.build === 'streetGrid') {
+          // inject engine data the generator needs; grid geometry is
+          // seed-deterministic, so exclusions and visuals agree
+          phase.params.avoid = this._excl.discs;
+          phase.params.waterY = cfg.terrain.waterLevel ?? 2;
+          const key = `${phase.params.seed}|${phase.params.area}`;
+          if (seen.has(key)) continue;           // same grid, different era
+          seen.add(key);
+          const hw = (phase.params.w || 6) / 2;
+          for (const path of streetGridPaths(phase.params)) {
+            for (let i = 0; i < path.length - 1; i++) {
+              this._excl.segs.push([path[i][0], path[i][1], path[i + 1][0], path[i + 1][1], hw]);
+            }
+          }
+        }
+      }
+    }
 
     // --- structures (each phase becomes a group animated by presence) ---
     this.animated = [];   // {group, from, to, rise, baseY, mode}
     for (const entry of cfg.structures) {
       for (const phase of entry.phases) {
-        if (this.skip.has('roads') && ['road', 'plaza'].includes(phase.build)) continue;
+        if (this.skip.has('roads') && ['road', 'plaza', 'streetGrid'].includes(phase.build)) continue;
         if (this.skip.has('lamps') && phase.build === 'lampline') continue;
         const g = buildStructure(entry, phase, cfg.terrain.heightAt);
         g.visible = false;
@@ -93,7 +115,7 @@ export class World {
           sinkDepth: phase.sinkDepth ?? 14,
           // terrain-anchored groups (children placed at absolute heights)
           // emerge by sliding up rather than scaling from the group origin
-          slide: ['palisade', 'rampart', 'road', 'plaza', 'lampline'].includes(phase.build),
+          slide: ['palisade', 'rampart', 'road', 'plaza', 'lampline', 'streetGrid'].includes(phase.build),
         });
       }
     }
@@ -136,13 +158,20 @@ export class World {
     const heightAt = this.cfg.terrain.heightAt;
     const styles = Array.isArray(phase.style) ? phase.style : [phase.style];
     for (let i = 0; i < phase.count; i++) {
-      const ang = r() * Math.PI * 2;
-      const rr = Math.sqrt(r());
-      const x = d.area[0] + Math.cos(ang) * rr * d.area[2];
-      const z = d.area[1] + Math.sin(ang) * rr * d.area[3];
-      const y = heightAt(x, z);
-      if (y < (this.cfg.terrain.waterLevel ?? 2) + 1) continue;
-      if (this._isExcluded(x, z)) continue;
+      // retry until the building finds a free block between the streets
+      let x, z, y, placed = false;
+      for (let attempt = 0; attempt < 10; attempt++) {
+        const ang = r() * Math.PI * 2;
+        const rr = Math.sqrt(r());
+        x = d.area[0] + Math.cos(ang) * rr * d.area[2];
+        z = d.area[1] + Math.sin(ang) * rr * d.area[3];
+        y = heightAt(x, z);
+        if (y < (this.cfg.terrain.waterLevel ?? 2) + 1) continue;
+        if (this._isExcluded(x, z, 9)) continue;
+        placed = true;
+        break;
+      }
+      if (!placed) continue;
       const style = styles[Math.floor(r() * styles.length)];
       const gen = generators[style.gen || style];
       if (!gen) continue;

@@ -210,6 +210,25 @@ export function buildConfig() {
           { from: jy, to: 9999, build: 'plaza', params: { rx: jr, rz: jr, color: jy >= 1950 ? 0x4f5257 : 0x8d8578 }, rise: 6 },
         ],
       })),
+      // ---- Yekaterinoslav's famous planned grid, and its successors ----
+      { id: 'grid-center', pos: [0, 0], phases: [
+        { from: 1797, to: 1862, build: 'streetGrid', params: { area: [-150, 140, 330, 250], angle: 0.28, spacing: 66, seed: 601, w: 6, color: 0x8f7a52 }, rise: 20 },
+        { from: 1862, to: 1958, build: 'streetGrid', params: { area: [-150, 140, 330, 250], angle: 0.28, spacing: 66, seed: 601, w: 7, color: 0x8d8578 }, rise: 12 },
+        { from: 1958, to: 9999, build: 'streetGrid', params: { area: [-150, 140, 330, 250], angle: 0.28, spacing: 66, seed: 601, w: 7, color: 0x53565a }, rise: 5 },
+      ]},
+      { id: 'grid-sloboda', pos: [0, 0], phases: [
+        { from: 1893, to: 1956, build: 'streetGrid', params: { area: [220, -420, 175, 155], angle: 0.25, spacing: 62, seed: 602, w: 6, color: 0x8f7a52 }, rise: 12 },
+        { from: 1956, to: 9999, build: 'streetGrid', params: { area: [220, -420, 175, 155], angle: 0.25, spacing: 62, seed: 602, w: 6, color: 0x53565a }, rise: 5 },
+      ]},
+      { id: 'grid-leftbank', pos: [0, 0], phases: [
+        { from: 1967, to: 9999, build: 'streetGrid', params: { area: [920, 30, 285, 395], angle: 0.1, spacing: 96, seed: 603, w: 8, color: 0x53565a }, rise: 8 },
+      ]},
+      { id: 'grid-pobeda', pos: [0, 0], phases: [
+        { from: 1973, to: 9999, build: 'streetGrid', params: { area: [-80, 770, 225, 215], angle: -0.2, spacing: 92, seed: 604, w: 8, color: 0x53565a }, rise: 6 },
+      ]},
+      { id: 'grid-yuzhmash', pos: [0, 0], phases: [
+        { from: 1956, to: 9999, build: 'streetGrid', params: { area: [-480, 1040, 245, 185], angle: 0.2, spacing: 86, seed: 605, w: 7, color: 0x53565a }, rise: 8 },
+      ]},
       // squares
       { id: 'plaza-cathedral', pos: [-330, 130], phases: [
         { from: 1835, to: 9999, build: 'plaza', params: { rx: 42, rz: 34, color: 0x8d8578 }, rise: 8 },

@@ -414,6 +414,37 @@ export function buildConfig() {
       { id: 'lamps-embankment', pos: [0, 0], phases: [
         { from: 1962, to: 9999, build: 'lampline', params: { path: EMBANKMENT, style: 'modern', offset: 8.5, spacing: 52 }, rise: 3 },
       ]},
+      // ---- the capillary street network, district by district ----
+      { id: 'grid-upper', pos: [0, 0], phases: [
+        { from: 1878, to: 1958, build: 'streetGrid', params: { area: [-160, -250, 280, 200], angle: 0.35, spacing: 64, seed: 501, w: 7, color: 0x8d8578 }, rise: 12 },
+        { from: 1958, to: 9999, build: 'streetGrid', params: { area: [-160, -250, 280, 200], angle: 0.35, spacing: 64, seed: 501, w: 7, color: 0x53565a }, rise: 5 },
+      ]},
+      { id: 'grid-podil', pos: [0, 0], phases: [
+        { from: 1100, to: 1850, build: 'streetGrid', params: { area: [220, -600, 185, 195], angle: 0.25, spacing: 56, seed: 502, w: 5, color: 0x84714f }, rise: 60 },
+        { from: 1850, to: 1962, build: 'streetGrid', params: { area: [220, -600, 185, 195], angle: 0.25, spacing: 56, seed: 502, w: 6, color: 0x8d8578 }, rise: 10 },
+        { from: 1962, to: 9999, build: 'streetGrid', params: { area: [220, -600, 185, 195], angle: 0.25, spacing: 56, seed: 502, w: 6, color: 0x53565a }, rise: 4 },
+      ]},
+      { id: 'grid-khresh-side', pos: [0, 0], phases: [
+        { from: 1872, to: 1956, build: 'streetGrid', params: { area: [110, 60, 125, 215], angle: -0.45, spacing: 72, seed: 503, w: 7, color: 0x8d8578 }, rise: 12 },
+        { from: 1956, to: 9999, build: 'streetGrid', params: { area: [110, 60, 125, 215], angle: -0.45, spacing: 72, seed: 503, w: 7, color: 0x53565a }, rise: 5 },
+      ]},
+      { id: 'grid-west', pos: [0, 0], phases: [
+        { from: 1882, to: 1962, build: 'streetGrid', params: { area: [-440, 120, 250, 220], angle: 0.25, spacing: 70, seed: 504, w: 7, color: 0x8d8578 }, rise: 14 },
+        { from: 1962, to: 9999, build: 'streetGrid', params: { area: [-440, 120, 250, 220], angle: 0.25, spacing: 70, seed: 504, w: 7, color: 0x53565a }, rise: 5 },
+      ]},
+      { id: 'grid-pechersk', pos: [0, 0], phases: [
+        { from: 1886, to: 1960, build: 'streetGrid', params: { area: [160, 420, 235, 235], angle: 0.1, spacing: 76, seed: 505, w: 7, color: 0x8d8578 }, rise: 14 },
+        { from: 1960, to: 9999, build: 'streetGrid', params: { area: [160, 420, 235, 235], angle: 0.1, spacing: 76, seed: 505, w: 7, color: 0x53565a }, rise: 5 },
+      ]},
+      { id: 'grid-leftbank-n', pos: [0, 0], phases: [
+        { from: 1967, to: 9999, build: 'streetGrid', params: { area: [1000, -420, 265, 295], angle: 0.1, spacing: 96, seed: 506, w: 8, color: 0x53565a }, rise: 8 },
+      ]},
+      { id: 'grid-leftbank-s', pos: [0, 0], phases: [
+        { from: 1964, to: 9999, build: 'streetGrid', params: { area: [1010, 300, 265, 315], angle: -0.15, spacing: 96, seed: 507, w: 8, color: 0x53565a }, rise: 8 },
+      ]},
+      { id: 'grid-obolon', pos: [0, 0], phases: [
+        { from: 1977, to: 9999, build: 'streetGrid', params: { area: [280, -950, 225, 185], angle: 0.2, spacing: 92, seed: 508, w: 8, color: 0x53565a }, rise: 6 },
+      ]},
       // squares
       { id: 'plaza-kontraktova', pos: [220, -600], phases: [
         { from: 1500, to: 9999, build: 'plaza', params: { rx: 36, rz: 30, color: 0x8d8578 }, rise: 25 },

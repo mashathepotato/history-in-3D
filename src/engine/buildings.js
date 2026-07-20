@@ -137,6 +137,42 @@ function ribbonGeo(samples, w, hAt, yOff, lateral = 0) {
   return geo;
 }
 
+// Deterministic minor-street network for a district: two families of
+// parallel streets clipped to an ellipse (radii along the grid's own axes),
+// with jitter, skips, and optional medieval wobble. Returns [x,z] polylines.
+// Must stay deterministic (seeded) — exclusions and visuals both derive
+// from it.
+export function streetGridPaths(p) {
+  const [cx, cz, rx, rz] = p.area;
+  const ang = p.angle || 0;
+  const spacing = p.spacing || 60;
+  const r = rng(p.seed || 7);
+  const ux = Math.cos(ang), uz = Math.sin(ang);   // along-grid axis
+  const vx = -uz, vz = ux;                        // cross axis
+  const paths = [];
+  const toWorld = (u, v) => [cx + u * ux + v * vx, cz + u * uz + v * vz];
+  const family = (ru, rv, flip) => {
+    for (let v = -rv + spacing * 0.6; v < rv - spacing * 0.3; v += spacing) {
+      if (r() < 0.13) continue;                   // gaps keep it organic
+      const vj = v + (r() - 0.5) * spacing * 0.22;
+      const chord = ru * Math.sqrt(Math.max(0, 1 - (vj / rv) * (vj / rv)));
+      if (chord < spacing * 0.7) continue;
+      const u0 = -chord * (0.86 + r() * 0.14), u1 = chord * (0.86 + r() * 0.14);
+      const pts = [];
+      const segs = p.wobble ? 4 : 1;
+      for (let i = 0; i <= segs; i++) {
+        const u = u0 + (u1 - u0) * (i / segs);
+        const wob = (i === 0 || i === segs) ? 0 : (r() - 0.5) * (p.wobble || 0) * spacing;
+        pts.push(flip ? toWorld(vj + wob, u) : toWorld(u, vj + wob));
+      }
+      paths.push(pts);
+    }
+  };
+  family(rx, rz, false);
+  family(rz, rx, true);
+  return paths;
+}
+
 function box(w, h, d, material, x = 0, y = 0, z = 0) {
   const m = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), material);
   m.position.set(x, y + h / 2, z);
@@ -687,6 +723,56 @@ export const generators = {
     return g;
   },
 
+  // The capillary street network of a district: all minor streets of one
+  // era merged into a single terrain-draped mesh. Streets skip water and
+  // landmark footprints (params.avoid is injected by the engine).
+  streetGrid(p = {}) {
+    const hAt = p.heightAt || (() => 0);
+    const waterY = p.waterY ?? 2;
+    const avoid = p.avoid || [];
+    const w = p.w || 6;
+    const positions = [], indices = [];
+    for (const path of streetGridPaths(p)) {
+      // walk the sampled line, splitting wherever it hits water or a landmark
+      const samples = samplePath(path, 12);
+      let run = [];
+      const flush = () => {
+        if (run.length < 2) { run = []; return; }
+        const geo = ribbonGeo(run, w, hAt, 0.42, 0);
+        const base = positions.length / 3;
+        const posArr = geo.attributes.position.array;
+        for (let i = 0; i < posArr.length; i++) positions.push(posArr[i]);
+        const idxArr = geo.index.array;
+        for (let i = 0; i < idxArr.length; i++) indices.push(idxArr[i] + base);
+        run = [];
+      };
+      for (const [x, z] of samples) {
+        let blocked = hAt(x, z) < waterY + 0.8;
+        if (!blocked) {
+          for (const [ax, az, ar] of avoid) {
+            const dx = x - ax, dz = z - az;
+            if (dx * dx + dz * dz < ar * ar) { blocked = true; break; }
+          }
+        }
+        if (blocked) flush();
+        else run.push([x, z]);
+      }
+      flush();
+    }
+    const geo = new THREE.BufferGeometry();
+    geo.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
+    geo.setIndex(indices);
+    geo.computeVertexNormals();
+    const m = new THREE.Mesh(geo, new THREE.MeshStandardMaterial({
+      color: p.color || 0x8d8578, roughness: 1, side: THREE.DoubleSide,
+      polygonOffset: true, polygonOffsetFactor: -1, polygonOffsetUnits: -1,
+    }));
+    m.receiveShadow = true;
+    const g = new THREE.Group();
+    g.add(m);
+    return g;
+  },
+
   // A line of streetlights along a path, offset to the side of the road.
   // style: 'gas' (1870s cast-iron, warm globes) or 'modern' (tall grey, arm).
   lampline(p = {}) {
@@ -986,7 +1072,7 @@ export const generators = {
 export function buildStructure(entry, phase, terrainHeightAt) {
   const gen = generators[phase.build];
   if (!gen) { console.warn(`Unknown generator: ${phase.build}`); return new THREE.Group(); }
-  const pathBased = ['palisade', 'rampart', 'road', 'plaza', 'lampline'].includes(phase.build);
+  const pathBased = ['palisade', 'rampart', 'road', 'plaza', 'lampline', 'streetGrid'].includes(phase.build);
   const params = pathBased ? { ...(phase.params || {}), heightAt: terrainHeightAt } : (phase.params || {});
   if (phase.build === 'plaza') { params.x = entry.pos[0]; params.z = entry.pos[1]; }
   const g = gen(params);

@@ -222,6 +222,34 @@ export function buildConfig() {
           { from: jy, to: 9999, build: 'plaza', params: { rx: jr, rz: jr, color: jy >= 1930 ? 0x4f5257 : 0x8a8578 }, rise: 6 },
         ],
       })),
+      // ---- the street fabric: medieval tangle to Georgian order ----
+      // the City's lanes: laid down medieval, rebuilt on the SAME lines
+      // after the Fire (the merchants would not wait for Wren's plan)
+      { id: 'grid-city', pos: [0, 0], phases: [
+        { from: 950, to: 1670, build: 'streetGrid', params: { area: [70, -210, 295, 195], angle: 0.1, spacing: 54, seed: 701, w: 4.5, color: 0x84714f, wobble: 0.5 }, rise: 80 },
+        { from: 1670, to: 1932, build: 'streetGrid', params: { area: [70, -210, 295, 195], angle: 0.1, spacing: 54, seed: 701, w: 5.5, color: 0x8d8578, wobble: 0.5 }, rise: 8 },
+        { from: 1932, to: 9999, build: 'streetGrid', params: { area: [70, -210, 295, 195], angle: 0.1, spacing: 54, seed: 701, w: 5.5, color: 0x53565a, wobble: 0.5 }, rise: 5 },
+      ]},
+      { id: 'grid-westend', pos: [0, 0], phases: [
+        { from: 1728, to: 1936, build: 'streetGrid', params: { area: [-450, -270, 215, 155], angle: -0.1, spacing: 62, seed: 702, w: 6, color: 0x8d8578 }, rise: 15 },
+        { from: 1936, to: 9999, build: 'streetGrid', params: { area: [-450, -270, 215, 155], angle: -0.1, spacing: 62, seed: 702, w: 6, color: 0x53565a }, rise: 5 },
+      ]},
+      { id: 'grid-westminster', pos: [0, 0], phases: [
+        { from: 1742, to: 1936, build: 'streetGrid', params: { area: [-770, -50, 160, 122], angle: -0.2, spacing: 58, seed: 703, w: 6, color: 0x8d8578 }, rise: 15 },
+        { from: 1936, to: 9999, build: 'streetGrid', params: { area: [-770, -50, 160, 122], angle: -0.2, spacing: 58, seed: 703, w: 6, color: 0x53565a }, rise: 5 },
+      ]},
+      { id: 'grid-southwark', pos: [0, 0], phases: [
+        { from: 1590, to: 1866, build: 'streetGrid', params: { area: [150, 210, 205, 145], angle: 0.05, spacing: 62, seed: 704, w: 5, color: 0x84714f, wobble: 0.35 }, rise: 40 },
+        { from: 1866, to: 1936, build: 'streetGrid', params: { area: [150, 210, 205, 145], angle: 0.05, spacing: 62, seed: 704, w: 6, color: 0x8d8578, wobble: 0.35 }, rise: 10 },
+        { from: 1936, to: 9999, build: 'streetGrid', params: { area: [150, 210, 205, 145], angle: 0.05, spacing: 62, seed: 704, w: 6, color: 0x53565a, wobble: 0.35 }, rise: 5 },
+      ]},
+      { id: 'grid-eastend', pos: [0, 0], phases: [
+        { from: 1822, to: 1952, build: 'streetGrid', params: { area: [660, -150, 245, 160], angle: 0.12, spacing: 56, seed: 705, w: 6, color: 0x8d8578 }, rise: 12 },
+        { from: 1952, to: 9999, build: 'streetGrid', params: { area: [660, -150, 245, 160], angle: 0.12, spacing: 56, seed: 705, w: 6, color: 0x53565a }, rise: 5 },
+      ]},
+      { id: 'grid-docklands', pos: [0, 0], phases: [
+        { from: 1990, to: 9999, build: 'streetGrid', params: { area: [950, 60, 150, 122], angle: 0.0, spacing: 74, seed: 706, w: 7, color: 0x53565a }, rise: 5 },
+      ]},
       // London invented gas street lighting (Pall Mall, 1807)
       { id: 'lamps-strand', pos: [0, 0], phases: [
         { from: 1807, to: 1955, build: 'lampline', params: { path: STRAND, style: 'gas', offset: 7, spacing: 34 }, rise: 3 },
