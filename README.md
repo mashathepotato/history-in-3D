@@ -1,4 +1,4 @@
-# History in 3D — Walk Through Kyiv, Dnipro & London
+# History in 3D — Walk Through Your City
 
 An interactive 3D journey through centuries of a city's history, rendered
 procedurally in the browser. Two cities so far:
